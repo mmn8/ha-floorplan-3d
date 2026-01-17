@@ -97,6 +97,24 @@ rooms:
 
 ## Configuration schemas
 
+## Table of Contents
+
+* [Building](#building)
+* [Room](#room)
+* [Entity](#entity)
+    * [IconEntity](#iconentity)
+    * [TemperatureDisplayEntity](#temperaturedisplayentity)
+* [Action](#action)
+    * [CallServiceAction](#callserviceaction)
+    * [MoreInfoAction](#moreinfoaction)
+    * [MoreInfoHass](#moreinfohass)
+* [HomeConfig](#homeconfig)
+* [Position](#position)
+* [UI](#ui)
+    * [RoomCard](#roomcard)
+    * [Scene](#scene)
+    * [EntityCard](#entitycard)
+
 ## Building
 
 _Object containing the following properties:_
