@@ -269,7 +269,8 @@ _(\*) Required._
 
 ## Known missing things
 * Sweet Home 3D multi floor rendering
-* Support for adding your own furniture 
+* Support for adding your own furniture
+* Making it look actually **cool**
 * Optimizations
 * Multi building rendering
 * Better documentation
