@@ -47,7 +47,7 @@ convert() {
 
 mkdir -p $FINAL_DESTINATION/models
 
-download_models
+# download_models
 unzip_download
 convert
 
