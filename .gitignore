@@ -39,3 +39,5 @@ apps/backend/app-config
 /config
 rootfs/
 .secrets
+package-lock.json
+.dockerenv
