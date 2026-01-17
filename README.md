@@ -1,19 +1,25 @@
 <h1 align="center"> Ha floorplan 3d  </h1>
 <h3 align="center">Interactive 3d floorplan for controlling your Home Assistant</h3>
 
-## What?
+## Table of Contents
+
+- [ Getting started](#-features)
+- [ Getting started](#-installation)
+- [ Configuring](#-usage)
+
+
+## About the project
 A small dashboard for Home Assistant that renders your floorplan based on [Sweet Home 3D](https://www.sweethome3d.com) file.
+
+
+## Getting started
+
+
 
 ## Features
 
 - Rendering floorplan based on Swet Home 3D file (.sh3d)
 
-
-## Table of Contents
-
-- [ Introduction](#-features)
-- [ Getting started](#-installation)
-- [ Configuring](#-usage)
 
 
 # Example configuration
