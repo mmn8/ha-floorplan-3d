@@ -47,7 +47,7 @@ The folder sturcture under the addon configuration is something like this:
 ├── home.xml         # Floorplan: Exported Sweet Home 3D data.
 └── building.yml     # Logic: Room configs, entities to be displayed
 ```
-The building.yml file's most important fields are members of the card array. Each of your room SweetHome ID and aliases are listed there. Here you configure where you want to display your entities, what [action](#-Action) happens when something is clicked etc.
+The building.yml file's most important fields are members of the card array. Each of your room SweetHome ID and aliases are listed there. Here you configure where you want to display your entities, what [action](#Action) happens when something is clicked etc.
 
 ### Example of a building.yml file
 ```yaml
