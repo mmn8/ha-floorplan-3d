@@ -1,9 +1,8 @@
 <h1 align="center"> Ha floorplan 3d  </h1>
 <h3 align="center">Interactive 3d floorplan for controlling your Home Assistant</h3>
 
-<p align="center"> 
-  <img src="https://placehold.co/600x200/000000/ffffff alt="Black placeholder">
-</p>
+## What?
+A small dashboard for Home Assistant that renders your floorplan based on [Sweet Home 3D](https://www.sweethome3d.com) file.
 
 ## Features
 
@@ -12,32 +11,23 @@
 
 ## Table of Contents
 
-- [🖤 Introduction](#-features)
-- [📦 Getting started](#-installation)
-- [🧪 Configuring](#-usage)
-  - [Sub category](#stop-any-running-project)
+- [ Introduction](#-features)
+- [ Getting started](#-installation)
+- [ Configuring](#-usage)
 
 
-
-
-# Configuration
+# Example configuration
 ```yaml
 title: "Home"
 foorplan_name: "home.xml"
 
 rooms:
   - id: room-ae706306-67b2-4bf3-a5aa-b14c97cde769
-    alias: Matiaksen huone
-    hassId: area.matiaksen_huone
+    alias: My Room
     tap_action:
       action: more-info 
       target:
           path: "room.yml"
-    double_tap_action:
-      action: call-service
-      service: light.toggle
-      target:
-          entity_id: light.matiaksen_huone_2
     entities:
       - type: icon 
         icon: plug-2 
@@ -46,17 +36,6 @@ rooms:
             x: 700 
             y: 1260
             z: 150
-      - type: icon 
-        entity_id: light.hue_ambiance_candle_3
-        tap_action:
-          action: call-service
-          service: light.toggle
-          target:
-            entity_id: light.hue_ambiance_candle_3
-        position: 
-          x: 520 
-          y: 1140 
-          z: 150 
       - type: temperatureDisplay
         font_size: 220 
         top_sensor_id: sensor.atc_efaf_temperature
@@ -65,25 +44,6 @@ rooms:
           x: 700 
           y: 1195 
           z: 0
- 
-  - id: room-a8239ead-614a-4d1e-9c8c-686e5a12d0a9
-    hassId: Makuuhone 
-    tap_action:
-      action: more-info 
-      target:
-        bottomSheetY: 0.85
-        path: "room.yml"
-    entities:
-      - type: temperatureDisplay
-        font_size: 220 
-        top_sensor_id: sensor.atc_efaf_temperature
-        bottom_sensor_id: sensor.atc_efaf_humidity
-        position:
-          x: 800 
-          y: 750         
-          z: 0
-   
- 
 ```
 
 ## Configuration options
