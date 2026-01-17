@@ -96,6 +96,7 @@ rooms:
 ```
 
 ## Configuration schemas
+List of all the possible options to configure the app
 
 ## Table of Contents
 
