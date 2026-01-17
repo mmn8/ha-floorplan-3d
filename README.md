@@ -1,5 +1,8 @@
 <h1 align="center"> Ha floorplan 3d  </h1>
-<h3 align="center">Interactive 3d floorplan for controlling your Home Assistant</h3>
+<h3 align="center">
+  Interactive 3d floorplan for controlling your Home Assistant
+</h3>
+
 
 ## Table of Contents
 
@@ -12,32 +15,64 @@
 A small dashboard for Home Assistant that renders your floorplan based on [Sweet Home 3D](https://www.sweethome3d.com) file.
 
 
-## Getting started
-
-
-
 ## Features
 
 - Rendering floorplan based on Swet Home 3D file (.sh3d)
 
+## Getting started 
+
+### 1. Install the addon
+Add the Addon repository to Home Assistant by clicking the button below or manually entering the repository url
+```
+https://github.com/mmn8/ha-floorplan-3d
+```
+
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmmn8%2Fha-floorplan-3d)
+
+and then install addon from the addon store.
+
+[![Open your Home Assistant instance and show the add-on store.](https://my.home-assistant.io/badges/supervisor_store.svg)](https://my.home-assistant.io/redirect/supervisor_store/)
+
+### 2. Open the Addon's web interface
+Upload your Sweet Home 3D file (.sh3d) to the setup wizard and if no errors occur you are prompted with the floorplan editor. Now you will need a way to edit your /addon_configs folder. I recommend the [Visual Studio Code Server](https://github.com/hassio-addons/addon-vscode) addon but any way to edit the folder works. All the addon configuration lives under /addon_configs. When you have the floorplan editor open and you edit the configuration the floorplan editor will automaticly hot-reload.
 
 
-# Example configuration
+## Configuring the addon
+
+The folder sturcture under the addon configuration is something like this:
+
+```
+/addon_configs/{SLUG}/
+├── home.yml         # Entry point: Defines home name and links files.
+├── home.xml         # Floorplan: Exported Sweet Home 3D data.
+└── building.yml     # Logic: Room configs, entities to be displayed
+```
+The building.yml file's most important fields are members of the card array. Each of your room SweetHome ID and aliases are listed there. Here you configure where you want to display your entities, what [action](##Action) happens when something is clicked etc.
+
+### Example of a building.yml file
 ```yaml
+/addon_configs/{SLUG}/
+└── building.yml 
+
 title: "Home"
-foorplan_name: "home.xml"
+foorplan_name: "home.xml" # What floorplan to load
 
 rooms:
-  - id: room-ae706306-67b2-4bf3-a5aa-b14c97cde769
-    alias: My Room
-    tap_action:
+  - id: room-ae706306-67b2-4bf3-a5aa-b14c97cde769 # Sweet Home 3D room uuid
+    alias: My Room # Display name. Automaticly generated from sh3d file if present
+    tap_action: # When you click on a room
       action: more-info 
       target:
           path: "room.yml"
-    entities:
-      - type: icon 
+    entities: # List of the entities displayed
+      - type: icon # Type of the entity
         icon: plug-2 
         entity_id: light.hue_lightstrip_plus_1
+        tap_action: # Action when you click on a icon
+           action: call-service
+           service: light.toggle
+           target:
+              entity_id: light.hue_lightstrip_plus_1
         position: 
             x: 700 
             y: 1260
@@ -52,9 +87,7 @@ rooms:
           z: 0
 ```
 
-## Configuration options
-List of all possible options
-
+## Configuration schemas
 
 ## Action
 
