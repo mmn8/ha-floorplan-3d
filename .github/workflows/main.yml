@@ -1,0 +1,21 @@
+name: GitHub build test
+run-name: is testing out GitHub Actions 🚀
+on:
+  push:
+    tags:        
+      - '*'          
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v6
+      - name: Publish
+        uses: home-assistant/builder@2025.11.0
+        with:
+          args: |
+            --target . \

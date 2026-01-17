@@ -1,0 +1,61 @@
+import React from "react";
+import { Routes, Route } from "react-router";
+import Home from "./Home";
+import ErrorBoundary from "@/utils/3DErrorBoundary";
+
+import Editor from "@/pages/EditorView";
+import HomeView from "@/pages/HomeView";
+import { HomeAssistantProvider } from "@/utils/HaConnect";
+
+function calculateBaseIngress() {
+  const parts = window.location.pathname.split("/");
+  if (parts.length <= 4) return "";
+  return "/api/hassio_ingress/" + parts[3] + "/";
+}
+
+function resolveWebsocketParams() {
+  let websocket = "";
+  let auth_token = "";
+  if (import.meta.env.DEV) {
+    websocket = import.meta.env.VITE_HA_API;
+    auth_token = import.meta.env.VITE_HA_TOKEN;
+  }
+
+  if (import.meta.env.PROD) {
+    websocket = "http://" + location.host;
+  }
+
+  return { websocket, auth_token };
+}
+
+const App: React.FC = () => {
+  const basename = calculateBaseIngress();
+  console.log(basename);
+
+  const { websocket, auth_token } = resolveWebsocketParams();
+  return (
+    <>
+      <ErrorBoundary
+        onError={() => {}}
+        fallback={
+          <p>
+            A fatal and unkown error has occured. Please check your
+            configuration. There is also a good chance that the fault is not
+            yours.
+          </p>
+        }
+      >
+        <Home>
+          <HomeAssistantProvider websocket={websocket} token={auth_token}>
+            <Routes>
+              <Route path="/*" element={<HomeView />} />
+              <Route path="/editor" element={<Editor />} />
+            </Routes>
+          </HomeAssistantProvider>
+        </Home>
+      </ErrorBoundary>
+    </>
+  );
+};
+
+export default App;
