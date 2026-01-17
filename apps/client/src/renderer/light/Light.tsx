@@ -1,0 +1,131 @@
+import React from "react";
+import { Html } from "@react-three/drei";
+import { motion, animate, motionValue } from "framer-motion";
+import { useEntity } from "@/utils/HaConnect";
+import { useEvaluateAction } from "@/utils/EvaluateAction";
+import { useFrame } from "@react-three/fiber";
+import { useConfigStore } from "@/store/";
+import type { Component } from "@/renderer/Components";
+import type { IIcon } from "@/types";
+import { useClickAction, DefaultAction } from "@/hooks/useClickAction";
+import { DynamicIcon } from "lucide-react/dynamic";
+import { useCurrentRoom } from "@/hooks";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import type { IconName } from "lucide-react/dynamic";
+
+const LightComponent: Component = {
+  name: "LightComponent",
+  component: (props: LightProps) => <LightComp {...props} />,
+  visibleOnPreview: true,
+};
+
+interface LightProps extends IIcon {
+  isRoomFocused: boolean;
+}
+
+//TODO: Animation when focusing on rooM!!
+const LightComp: React.FC<LightProps> = ({
+  position,
+  entity_id,
+  tap_action,
+  double_tap_action,
+  hold_action,
+  icon,
+  isRoomFocused,
+  render_light = true,
+  visible_preview = false,
+}) => {
+  const { isPreview } = useCurrentRoom();
+  const hassEntity = useEntity(entity_id);
+  const { evaluateAction } = useEvaluateAction();
+  const { vibrate } = useHapticFeedback();
+
+  const editorMode = useConfigStore((state) => state.editorMode);
+  const isLightOn = hassEntity.state.toLowerCase() === "on";
+  const intensity = React.useRef(motionValue(isLightOn ? 1 : 0)).current;
+  const lightRef = React.useRef(undefined);
+  const [rotation, setRotation] = React.useState(0);
+
+  const clickHandlers = useClickAction({
+    onSingleClick: () => {
+      evaluateAction(tap_action ?? DefaultAction(entity_id));
+      setRotation(rotation + 360);
+      vibrate("success");
+    },
+    onDoubleClick: () => {
+      evaluateAction(double_tap_action);
+      if (double_tap_action) setRotation(rotation + 360);
+    },
+    onHold: () => evaluateAction(hold_action),
+  });
+
+  React.useEffect(() => {
+    const controls = animate(
+      intensity,
+      hassEntity.state.toLowerCase() === "on" ? 3 : 0,
+      {
+        repeatType: "reverse",
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    );
+
+    return () => controls.stop();
+  }, [isRoomFocused, isLightOn, hassEntity, intensity]);
+
+  useFrame(() => {
+    if (lightRef.current) lightRef.current.intensity = intensity.get();
+  });
+
+  if (isPreview && !visible_preview) return <></>;
+
+  return (
+    <>
+      <mesh>
+        <Html
+          zIndexRange={[10, 0]}
+          position={[position.x / 100, position.z / 100, position.y / 100]}
+        >
+          <motion.div
+            className="bg-[hsl(0,0%,5%)] p-2 rounded-full border-2 border-[hsl(0,0%,30%)] "
+            animate={{
+              rotate: rotation,
+              color:
+                hassEntity.state.toLowerCase() === "on" ? "#fbbf24" : "#9ca3af",
+
+              scale: 1,
+              opacity: 1,
+            }}
+            initial={{ scale: 0.5, opacity: 0 }}
+            whileHover={{ scale: 1.1 }}
+            transition={{
+              duration: 0.4,
+              scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+            }}
+            {...clickHandlers}
+          >
+            <DynamicIcon
+              name={(icon as IconName) ?? ("lightbulb" as IconName)}
+              size={24}
+              className="stroke-1 "
+            />
+          </motion.div>
+        </Html>
+      </mesh>
+      {render_light && !editorMode && isRoomFocused && !isPreview && (
+        <pointLight
+          ref={lightRef}
+          position={[
+            position.x / 100 + 0.2,
+            position.z / 100,
+            position.y / 100,
+          ]}
+          color="orange"
+          intensity={3}
+        />
+      )}
+    </>
+  );
+};
+
+export default LightComponent;

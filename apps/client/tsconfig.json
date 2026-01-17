@@ -11,12 +11,12 @@
 		],
 		"outDir": "./dist",
 		"rootDir": "src",
-		"baseUrl": "./src",
+		"baseUrl": ".",
 		"moduleResolution": "bundler",
 		"skipLibCheck": true,
 		"paths": {
 			"@/*": [
-				"./*"
+				"src/*"
 			]
 		}
 	},
