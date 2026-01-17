@@ -2,7 +2,11 @@
 
 Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard that allows you to control your smart home from a 3D view. It renders the floorplan based on your [Sweet Home 3D](https://www.sweethome3d.com) file. 
 
-**Disclaimer:** the software is in **beta** stage: a lot of features are missing and don't be suprised if you find a bug. Please report them to issues tab. 
+**Disclaimer 1:** currently there only **mobile** ui :(. 
+
+**Disclaimer 2:** the software is in **beta** stage: a lot of features are missing and don't be suprised if you find a bug. Please report them to issues tab. 
+
+
 
 ## Table Of Contents
 * [Features](#features)
@@ -13,9 +17,9 @@ Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard
 
 
 ## Features
-* **Rendering .sh3d:** Renders walls, rooms, doors and windows, basic furniture.
+* **Rendering .sh3d file:** Rendering walls, rooms, doors and windows, basic furniture.
 * **Simple config:** Simple config to configure floorplan
-* **Simple UI for cards:** Possible to render few basic cards
+* **Simple mobile UI for cards:** Possible to render few basic cards
 * **Furniture:** The base (about 100 pieces) furniture set of Sweet Home 3D is currently supported
 
 
