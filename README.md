@@ -1,23 +1,23 @@
-<h1 align="center"> Ha floorplan 3d  </h1>
-<h3 align="center">
-  Interactive 3d floorplan for controlling your Home Assistant
-</h3>
+# Ha Floorplan 3D
 
+Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard that allows you to control your smart home from a 3D view. It renders the floorplan based on your [Sweet Home 3D](https://www.sweethome3d.com) file. 
 
-## Table of Contents
+**Disclaimer:** the software is in **beta** stage: a lot of features are missing and don't be suprised if you find a bug. Please report them to issues tab. 
 
-- [ Getting started](#-features)
-- [ Getting started](#-installation)
-- [ Configuring](#-usage)
-
-
-## About the project
-A small dashboard for Home Assistant that renders your floorplan based on [Sweet Home 3D](https://www.sweethome3d.com) file.
+## Table Of Contents
+* [Getting started](#getting-started)
+* [Configuring](#configuring-the-addon)
+* [All configuration options](#configuration-schemas)
+* [Known missing things](#known-missing-things)
 
 
 ## Features
+* **Rendering .sh3d:** Renders walls, rooms, doors and windows, basic furniture.
+* **Simple config:** Simple config to configure floorplan
+* **Simple UI for cards:** Possible to render few basic cards
+* **Furniture:** The base (about 100 pieces) furniture set of Sweet Home 3D is currently supported
 
-- Rendering floorplan based on Swet Home 3D file (.sh3d)
+
 
 ## Getting started 
 
@@ -36,6 +36,7 @@ and then install addon from the addon store.
 ### 2. Open the Addon's web interface
 Upload your Sweet Home 3D file (.sh3d) to the setup wizard and if no errors occur you are prompted with the floorplan editor. Now you will need a way to edit your /addon_configs folder. I recommend the [Visual Studio Code Server](https://github.com/hassio-addons/addon-vscode) addon but any way to edit the folder works. All the addon configuration lives under /addon_configs. When you have the floorplan editor open and you edit the configuration the floorplan editor will automaticly hot-reload.
 
+<br>
 
 ## Configuring the addon
 
@@ -47,7 +48,9 @@ The folder sturcture under the addon configuration is something like this:
 ├── home.xml         # Floorplan: Exported Sweet Home 3D data.
 └── building.yml     # Logic: Room configs, entities to be displayed
 ```
-The building.yml file's most important fields are members of the card array. Each of your room SweetHome ID and aliases are listed there. Here you configure where you want to display your entities, what [action](#Action) happens when something is clicked etc.
+
+
+The cards section of your building.yml is the foundation of your floorplan. All rooms of SweetHome 3D are listed there. Here you configure what is visible on the floorplan.
 
 ### Example of a building.yml file
 ```yaml
@@ -259,4 +262,11 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
+## Known missing things
+* Sweet Home 3D multi floor rendering
+* Support for adding your own furniture 
+* Optimizations
+* Multi building rendering
+* Better documentation
+* More cards, maybe a custom card api? Integration to Home Assistant cards?
 
