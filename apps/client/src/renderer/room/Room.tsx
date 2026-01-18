@@ -42,8 +42,9 @@ const Room: React.FC<RoomProps> = ({ id, point }) => {
   }, [room, editorMode, currentRoom, isPreview]);
 
   function handleRoomError(error) {
+    console.log("once again error!");
     addError({
-      type: ErrorType.RECOVERABLE,
+      type: ErrorType.ROOM_ERROR,
       title: String(error),
       description: 'On room "' + (room.alias ?? id) + '"',
     });

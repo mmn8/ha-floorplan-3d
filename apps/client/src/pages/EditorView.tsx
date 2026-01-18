@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera, Grid } from "@react-three/drei";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useLayoutEffect, useRef } from "react";
 import { useState } from "react";
 import Scene from "@/renderer/Scene";
 import { useConfigStore } from "@/store";
@@ -34,6 +34,7 @@ export default function EditorView() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const { errors } = useErrorStore();
   const { home } = useHomeStore();
+  const [version, setVersion] = useState(0);
 
   const fetchHomeData = useLoadHome(
     () => {},
@@ -49,6 +50,7 @@ export default function EditorView() {
   const reload = React.useCallback(() => {
     fetchHomeData();
     setLastRefreshed(Date.now());
+    setVersion((prev) => prev + 1);
   }, [fetchHomeData]);
 
   useEffect(() => {
@@ -138,12 +140,12 @@ export default function EditorView() {
             sectionColor="white"
           />
 
-          <PerspectiveCamera position={center} makeDefault />
-          <OrbitControls
-          // target={new THREE.Vector3(center.x, 0, center.z - 3)}
-          />
+          <PerspectiveCamera position={[0, 10, 0]} makeDefault />
+          <OrbitControls />
           <ambientLight intensity={3} color="#f4fffa" />
-          <Scene />
+          <group key={version}>
+            <Scene />
+          </group>
         </Canvas>
       </div>
     </>

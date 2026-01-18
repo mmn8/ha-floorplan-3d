@@ -25,8 +25,8 @@ export function useLoadHome(setIsLoading, setConfig) {
   const { addError, reset } = useErrorStore();
 
   const fetchHomeData = async () => {
-    const controller = new AbortController();
     reset();
+    const controller = new AbortController();
     setIsLoading(true);
 
     try {

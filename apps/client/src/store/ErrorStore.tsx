@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 export enum ErrorType {
   FATAL,
+  ROOM_ERROR,
   ZOD_ERROR,
 }
 
