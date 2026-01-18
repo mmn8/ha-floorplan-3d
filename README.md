@@ -11,7 +11,7 @@ Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard
 ## Table Of Contents
 * [Features](#features)
 * [Getting started](#getting-started)
-* [Configuring](#configuring-the-addon)
+* [Basic usage](#basic-usage)
 * [All configuration options](#configuration-schemas)
 * [Known missing things](#known-missing-things)
 
@@ -37,13 +37,21 @@ and then install addon from the addon store.
 [![Open your Home Assistant instance and show the add-on store.](https://my.home-assistant.io/badges/supervisor_store.svg)](https://my.home-assistant.io/redirect/supervisor_store/)
 
 ### 2. Open the Addon's web interface
-Upload your Sweet Home 3D file (.sh3d) to the setup wizard and if no errors occur you are prompted with the floorplan editor. Now you will need a way to edit your /addon_configs folder. I recommend the [Visual Studio Code Server](https://github.com/hassio-addons/addon-vscode) addon but any way to edit the folder works. All the addon configuration lives under /addon_configs. When you have the floorplan editor open and you edit the configuration the floorplan editor will automaticly hot-reload.
 
-<br>
+#### 1. Upload your floorplan
+Upload your Sweet Home 3D file (.sh3d) to the setup wizard. Once processed the floorplan editor will launch.
 
-## Configuring the addon
+#### 2. How to configure?
+Configuration files are stored in your ```/addon_configs``` folder. To manage these files you will need a file editor
+* **Recommended:** [Visual Studio Code Server](https://github.com/hassio-addons/addon-vscode)
+* **Alternative:** Any way to edit your /addon_configs, so ssh, samba, etc
 
-The folder sturcture under the addon configuration is something like this:
+#### 3. Hot reloading
+Once you have the floorplan editor open and you make a change to the config the editor will automaticly reload.
+
+## Basic usage
+
+The folder sturcture under the ```/addon_configs``` is something like this:
 
 ```
 /addon_configs/{SLUG}/
