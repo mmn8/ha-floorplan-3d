@@ -15,13 +15,11 @@ Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard
 * [All configuration options](#configuration-schemas)
 * [Known missing things](#known-missing-things)
 
-
 ## Features
 * **Rendering .sh3d file:** Rendering walls, rooms, doors and windows, basic furniture.
 * **Simple config:** Simple config to configure floorplan
 * **Simple mobile UI for cards:** Possible to render few basic cards
 * **Furniture:** The base (about 100 pieces) furniture set of Sweet Home 3D is currently supported
-
 
 
 ## Getting started 
@@ -303,14 +301,11 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
-
-
 ## Known missing things
-* Sweet Home 3D multi floor rendering
-* Support for adding your own furniture
+* Multi floor support
+* Support for more furniture
 * Making it look actually **cool**
 * Optimizations
 * Multi building rendering
 * Better documentation
-* More cards, maybe a custom card api? Integration to Home Assistant cards?
 
