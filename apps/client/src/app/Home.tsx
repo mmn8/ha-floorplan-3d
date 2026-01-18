@@ -1,20 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useEffectEvent } from "react";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
-import ErrorList from "@/components/ErrorList";
 import SetupWizard from "@/pages/SetupView";
 import { LoadingCircleSpinner } from "@/components/LoadingSpinner";
 import { useLoadHome } from "@/hooks/useLoadHome";
 
-export default function Home({ children }) {
+export interface Config {
+  configured: boolean;
+}
+
+interface HomeProps {
+  children: React.ReactNode;
+}
+
+export default function Home({ children }: HomeProps) {
   //Load home.yaml --> load buildings --> parse --> save to zustand store
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { errors } = useErrorStore();
-  const [config, setConfig] = useState(null);
-  const fetchHomeData = useLoadHome(setIsLoading, setConfig);
+  const [config, setConfig] = useState<Config>(null);
+  const _fetchHomeData = useLoadHome(setIsLoading, setConfig);
+
+  const fetchHomeData = useEffectEvent(() => {
+    _fetchHomeData();
+  });
 
   useEffect(() => {
     fetchHomeData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
@@ -23,10 +36,6 @@ export default function Home({ children }) {
 
   if (!config?.configured) {
     return <SetupWizard setConfig={setConfig} config={config} />;
-  }
-
-  if (errors.filter((e) => e.type === ErrorType.FATAL).length != 0) {
-    return <ErrorList isOpen={true} closeModal={undefined} />;
   }
 
   return <>{children}</>;

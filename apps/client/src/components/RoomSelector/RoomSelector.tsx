@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useEffectEvent } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { useRooms, useCurrentRoom } from "@/hooks/";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
@@ -17,7 +17,7 @@ export const RoomSelector = () => {
   const ref = useRef(null);
   const real_rooms = useRooms();
 
-  useEffect(() => {
+  const onRoomChange = useEffectEvent((currentRoom) => {
     const currentRoomIndex: number = real_rooms.findIndex((room: IRoom) => {
       return room.id === currentRoom;
     });
@@ -25,9 +25,15 @@ export const RoomSelector = () => {
     setCurrentItem(currentRoomIndex);
     x.set(currentRoomIndex * itemWidth * -1);
     vibrate("light");
-  }, [currentRoom]);
+  });
 
   useEffect(() => {
+    onRoomChange(currentRoom);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRoom]);
+
+  const onItemChange = useEffectEvent((currentItem: number) => {
     if (!real_rooms[currentItem]) return;
 
     setCurrentRoom(real_rooms[currentItem].id);
@@ -37,6 +43,12 @@ export const RoomSelector = () => {
       stiffness: 300,
       damping: 30,
     });
+  });
+
+  useEffect(() => {
+    onItemChange(currentItem);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentItem]);
 
   return (

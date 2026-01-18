@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useEffectEvent } from "react";
 import { RoomSelector } from "@/components/RoomSelector";
 import {
   motion,
@@ -24,7 +24,7 @@ function calculateConstraints(targetRef) {
   };
 }
 export const BottomSheetContainer = () => {
-  const { isOpen, setIsOpen, maxHeight } = useBottomSheetStore();
+  const { isOpen, setIsOpen } = useBottomSheetStore();
   const { currentRoom } = useCurrentRoom();
   const { addError } = useErrorStore();
   const room = useRoom(currentRoom);
@@ -32,28 +32,37 @@ export const BottomSheetContainer = () => {
   const y = useMotionValue(0);
   const targetRef = useRef<HTMLDivElement>(null);
   const [cardsData, setCardsData] = useState<IUISchema>(null);
-  const [constraints, setConstraints] = React.useState({ top: 0, bottom: 0 });
+  const [constraints, setConstraints] = React.useState({
+    top: 0.25 * window.innerHeight,
+    bottom: 0,
+  });
+
+  const onOpen = useEffectEvent(() => {
+    if (constraints.bottom === 0) return;
+    animate(y, isOpen ? constraints.top : constraints.bottom, {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+    });
+  });
 
   useEffect(() => {
-    let isMounted = true;
-    console.log(room);
+    let ignore = false;
 
-    const load = async () => {
+    const fetchData = async () => {
       if (!room?.ui?.path) {
         setCardsData(null);
         return;
       }
       const ui = await loadUI(room?.ui?.path);
-      console.log("async running");
-      if (isMounted && ui?.cards) setCardsData(ui);
+      if (!ignore && ui?.cards) setCardsData(ui);
     };
 
-    load();
-
+    fetchData();
     return () => {
-      isMounted = false;
+      ignore = true;
     };
-  }, [currentRoom]);
+  }, [room?.ui?.path]);
 
   useEffect(() => {
     if (!targetRef.current) return;
@@ -61,18 +70,15 @@ export const BottomSheetContainer = () => {
     const newConstraints = calculateConstraints(targetRef);
     setConstraints(newConstraints);
     y.set(newConstraints.bottom);
-  }, [maxHeight, y]);
+  }, [y]);
 
   useEffect(() => {
-    animate(y, isOpen ? maxHeight : constraints.bottom, {
-      type: "spring",
-      stiffness: 300,
-      damping: 30,
-    });
-  }, [isOpen, constraints, maxHeight, y]);
+    onOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleDragEnd = (_, info: PanInfo) => {
-    const isOpening = info.point.y < maxHeight;
+    const isOpening = info.point.y < constraints.top;
     setIsOpen(isOpening);
   };
 

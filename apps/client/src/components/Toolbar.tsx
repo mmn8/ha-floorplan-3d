@@ -2,8 +2,28 @@ import { AlertTriangle, Settings, RefreshCcw } from "lucide-react";
 import React from "react";
 import { useErrorStore } from "@/store";
 import ErrorList from "@/components/ErrorList";
+import { MouseEventHandler } from "react";
 
-const ErrorCounter = ({ count, onClick }) => {
+interface ErrorCounterProps {
+  count: number;
+  onClick: MouseEventHandler<HTMLDivElement>;
+}
+
+interface RefreshTimeProps {
+  elapsed: number;
+  onClick: MouseEventHandler<HTMLDivElement>;
+}
+
+interface SettingsButtonProps {
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}
+
+interface ToolbarProps {
+  date: number;
+  manualReload: MouseEventHandler<HTMLDivElement>;
+}
+
+const ErrorCounter = ({ count, onClick }: ErrorCounterProps) => {
   const badgeColor = count > 0 ? "bg-red-600" : "bg-gray-500";
   const iconColor = count > 0 ? "text-red-500" : "text-gray-400";
 
@@ -22,7 +42,7 @@ const ErrorCounter = ({ count, onClick }) => {
   );
 };
 
-const RefreshTime = ({ elapsed, onClick }) => {
+const RefreshTime = ({ elapsed, onClick }: RefreshTimeProps) => {
   return (
     <div
       className="flex items-center space-x-2  py-1 rounded-full cursor-default bg-normal"
@@ -38,7 +58,7 @@ const RefreshTime = ({ elapsed, onClick }) => {
   );
 };
 
-const SettingsButton = ({ onClick }) => {
+const SettingsButton = ({ onClick }: SettingsButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -50,7 +70,7 @@ const SettingsButton = ({ onClick }) => {
   );
 };
 
-const Toolbar = ({ date, manualReload }) => {
+const Toolbar = ({ date, manualReload }: ToolbarProps) => {
   const errors = useErrorStore((state) => state.errors);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 

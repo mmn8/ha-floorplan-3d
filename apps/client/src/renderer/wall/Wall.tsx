@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 import { CSG } from "three-csg-ts";
 import { useHomeStore } from "@/store";
-import { useFloorplan } from "@/hooks/useBuilding";
 import { useColor } from "@/utils/useColor";
 import type { Component } from "@/renderer/Components";
+import { IBuildingData } from "@/types";
 
 interface WallProps {
   xEnd: number;
@@ -13,7 +13,7 @@ interface WallProps {
   yStart: number;
   height: number;
   thickness: number;
-  building;
+  building: IBuildingData;
 }
 
 const WallComponent: Component = {
@@ -32,7 +32,7 @@ const Wall: React.FC<WallProps> = ({
   building,
 }) => {
   const { home } = useHomeStore();
-  const floorplan = useFloorplan(building);
+  const floorplan = building.floorplan;
   const color = useColor("wall");
 
   const geometry = React.useMemo(() => {
@@ -119,10 +119,7 @@ const Wall: React.FC<WallProps> = ({
   return (
     <>
       <mesh geometry={geometry}>
-        <meshStandardMaterial
-          color={color}
-          roughness={1}
-        ></meshStandardMaterial>
+        <meshStandardMaterial color={color}></meshStandardMaterial>
       </mesh>
     </>
   );

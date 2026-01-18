@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"time"
 )
 
 var upgrader = websocket.Upgrader{
@@ -40,13 +39,8 @@ func SSEHandler(c *gin.Context) {
 
 	defer watcher.Close()
 
-	ticker := time.NewTicker(10 * time.Second)
-	defer ticker.Stop()
-
 	for {
 		select {
-		case <-ticker.C:
-			conn.WriteMessage(websocket.TextMessage, []byte("timer"))
 		case event, ok := <-watcher.Events:
 			if !ok {
 				return

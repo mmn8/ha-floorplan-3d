@@ -52,6 +52,10 @@ function useFurnitureInfo(id) {
   return { data, loading };
 }
 
+interface FurnitureModelProps extends Omit<FurnitureProps, "catalogId"> {
+  modelPath: string;
+}
+
 export const FurnitureModel = ({
   modelPath,
   x,
@@ -61,7 +65,7 @@ export const FurnitureModel = ({
   width,
   height,
   depth,
-}) => {
+}: FurnitureModelProps) => {
   const split = modelPath.split("/");
   const objName = split[6];
 

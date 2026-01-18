@@ -3,9 +3,14 @@ import React from "react";
 import { ProgressButton } from "@/components/Button";
 import { useNavigate } from "react-router";
 import { useLoadHome } from "@/hooks/useLoadHome";
+import type { Config } from "@/app/Home";
 
 //TODO: Improve this from this alpha state
-export default function SetupWizard({ setConfig, config }) {
+interface SetupWizardProps {
+  setConfig: (conf: Config) => void;
+  config: Config;
+}
+export default function SetupWizard({ setConfig, config }: SetupWizardProps) {
   const [loading, setLoading] = React.useState(false);
   const fileInputRef = React.useRef(undefined);
   const navigate = useNavigate();

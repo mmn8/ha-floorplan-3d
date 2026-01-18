@@ -7,43 +7,40 @@ import { NoMobile } from "@/components/NoMobile";
 import { useCurrentRoom } from "@/hooks";
 import Camera from "@/renderer/Camera";
 import { ScanEye } from "lucide-react";
-
-const Button = ({ onClick, children }) => {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        zIndex: 10,
-        top: 20,
-        left: 20,
-        padding: "0.5rem 1rem",
-        fontSize: "1rem",
-        color: "white",
-      }}
-    >
-      {children}
-    </button>
-  );
-};
+import { useErrorStore, ErrorType } from "@/store/ErrorStore";
+import ErrorList from "@/components/ErrorList";
 
 export default function HomeView() {
   const isMobile = useIsMobile();
   const { setIsPreview, isPreview } = useCurrentRoom();
+  const { errors } = useErrorStore();
 
   if (!isMobile && !(import.meta.env.DEV ?? false)) {
     return <NoMobile />;
   }
 
+  if (errors.filter((e) => e.type === ErrorType.FATAL).length != 0) {
+    return <ErrorList isOpen={true} closeModal={undefined} />;
+  }
+
   return (
     <>
       <div className="absolute z-10 right-0 flex">
-        <Button
+        <button
           onClick={() => {
             setIsPreview(!isPreview);
           }}
+          style={{
+            zIndex: 10,
+            top: 20,
+            left: 20,
+            padding: "0.5rem 1rem",
+            fontSize: "1rem",
+            color: "white",
+          }}
         >
           <ScanEye size={34} />
-        </Button>
+        </button>
       </div>
       <div className="flex flex-col h-screen bg-gray-100 overscroll-none">
         <div className="flex-1 flex items-center justify-center  z-0">

@@ -1,2 +1,2 @@
-export { useRooms, useRoom, useFloorplan } from "./useBuilding"
+export { useRooms, useRoom } from "./useBuilding"
 export { useCurrentRoom } from "./useCurrentRoom"

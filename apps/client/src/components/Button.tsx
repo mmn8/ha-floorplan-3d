@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import React from "react";
 
 function Spinner() {
   return (
@@ -16,12 +17,19 @@ function Spinner() {
   );
 }
 
+interface ProgressButtonProps {
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  children?: React.ReactNode;
+  loading: boolean;
+  containerVariants?;
+}
+
 export const ProgressButton = ({
   onClick,
   children = "click",
   loading,
   containerVariants,
-}) => {
+}: ProgressButtonProps) => {
   return (
     <motion.button
       onClick={onClick}

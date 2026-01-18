@@ -6,8 +6,14 @@ import { useRoom } from "@/hooks/";
 import { useCurrentRoom } from "@/hooks";
 import { useClickAction } from "@/hooks/useClickAction";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import type { Point } from "@/types";
 
-export function RoomClickBox({ id, points }) {
+interface RoomClickBoxProps {
+  id: string;
+  points: Point[];
+}
+
+export function RoomClickBox({ id, points }: RoomClickBoxProps) {
   const { evaluateAction } = useEvaluateAction();
   const { vibrate } = useHapticFeedback();
   const roomConfig = useRoom(id);
@@ -31,7 +37,6 @@ export function RoomClickBox({ id, points }) {
 
   const clickHandlers = useClickAction({
     onSingleClick: () => {
-      console.log("clcking room");
       if (isPreview) {
         setCurrentRoom(id);
         vibrate("medium");

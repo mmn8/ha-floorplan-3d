@@ -5,6 +5,7 @@ import { useEntity } from "@/utils/HaConnect";
 import { useEvaluateAction } from "@/utils/EvaluateAction";
 import { useClickAction } from "@/hooks/useClickAction";
 import { IDeviceCard, IAction } from "@/types";
+import { HassEntity } from "home-assistant-js-websocket";
 
 const default_action = (entity_id) => {
   return {
@@ -35,7 +36,12 @@ const text = tv({
   },
 });
 
-function Icon({ entity, ...clickHandlers }) {
+interface IconProps {
+  entity: HassEntity;
+  [key: string]: unknown;
+}
+
+function Icon({ entity, ...clickHandlers }: IconProps) {
   const isOn = entity.state.toLowerCase() === "on";
   const iconVariants = {
     on: { color: "#fbbf24", scale: 1, opacity: 1 },
@@ -65,17 +71,18 @@ interface EntityCardProps
   extends React.HTMLAttributes<HTMLDivElement>, IDeviceCard {}
 
 interface WideDeviceCardProps {
-  entity;
+  entity: HassEntity;
   brightness: number;
   brightnessPercent: string;
+  [key: string]: unknown;
 }
 
-const WideDeviceCard: React.FC<WideDeviceCardProps> = ({
+function WideDeviceCard({
   entity,
   brightness,
   brightnessPercent,
   ...clickHandlers
-}) => {
+}: WideDeviceCardProps) {
   const totalDots = 18;
   const activeDots = Math.ceil((brightness / 100) * totalDots);
 
@@ -110,7 +117,7 @@ const WideDeviceCard: React.FC<WideDeviceCardProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export function DeviceCard({
   size,

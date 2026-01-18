@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export enum ErrorType {
   FATAL,
-  RECOVERABLE,
+  ZOD_ERROR,
 }
 
 export interface Error {

@@ -1,42 +1,51 @@
 import { useMemo } from "react";
-import { useBuilding, useFloorplan } from "@/hooks/useBuilding";
+import { useBuilding } from "@/hooks/useBuilding";
 import ErrorBoundary from "@/utils/3DErrorBoundary";
 import { renderComponent } from "@/renderer/Components";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
 
-function Building({ building_id }) {
+interface BuildingProps {
+  building_id: number;
+}
+
+function Building({ building_id }: BuildingProps) {
   const building = useBuilding(building_id);
-  const floorplan = useFloorplan(building);
   const { addError } = useErrorStore();
 
-  const comps = useMemo(() => {
-    if (!floorplan) return null;
+  const objectsToRender = useMemo(() => {
+    if (!building.floorplan) return [];
 
-    return Object.entries(floorplan).flatMap(([key, items]) => {
+    return Object.entries(building.floorplan).flatMap(([key, items]) => {
       if (!Array.isArray(items)) return [];
 
-      const Comp = renderComponent(key);
-      if (!Comp) return [];
-
       return items.map((item, index) => {
+        return { key: key, data: item, index: index };
+      });
+    });
+  }, [building.floorplan]);
+
+  return (
+    <>
+      {objectsToRender.map((item, index) => {
+        const Comp = renderComponent(item.key);
+        if (!Comp) return null;
+
         function onError(error) {
           addError({
             type: ErrorType.FATAL,
             title: error,
-            description: key,
+            description: item.key,
           });
         }
 
         return (
-          <ErrorBoundary key={`${key}-${index}`} onError={onError}>
-            <Comp key={`${key}-${index}`} {...item} building={building} />
+          <ErrorBoundary key={`${item.key}-${index}`} onError={onError}>
+            <Comp {...item.data} building={building} />
           </ErrorBoundary>
         );
-      });
-    });
-  }, [floorplan, building, addError]);
-
-  return <>{comps}</>;
+      })}
+    </>
+  );
 }
 
 function Scene() {

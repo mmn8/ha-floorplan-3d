@@ -27,8 +27,8 @@ const Room: React.FC<RoomProps> = ({ id, point }) => {
   const editorMode = useConfigStore((state) => state.editorMode);
   const { addError } = useErrorStore();
 
-  const comps = useMemo(() => {
-    if (!room?.entities) return null;
+  const visibleEntities = useMemo(() => {
+    if (!room?.entities) return [];
 
     const isRoomFocused = editorMode || room?.id === (currentRoom ?? 0);
     const toRender = isRoomFocused
@@ -38,36 +38,41 @@ const Room: React.FC<RoomProps> = ({ id, point }) => {
             return entity;
         });
 
-    return toRender.map((entity, index) => {
-      const Comp = renderComponent(entity?.type);
+    return toRender;
+  }, [room, editorMode, currentRoom, isPreview]);
 
-      function onError(error) {
-        addError({
-          type: ErrorType.RECOVERABLE,
-          title: String(error),
-          description: 'On room "' + (room.alias ?? id) + '"',
-        });
-      }
-
-      return (
-        <ErrorBoundary key={entity?.type + "-" + index} onError={onError}>
-          <Comp
-            key={entity?.type + "-" + index}
-            {...entity}
-            room={room}
-            isRoomFocused={isRoomFocused}
-          />
-          ;
-        </ErrorBoundary>
-      );
+  function handleRoomError(error) {
+    addError({
+      type: ErrorType.RECOVERABLE,
+      title: String(error),
+      description: 'On room "' + (room.alias ?? id) + '"',
     });
-  }, [id, room]);
+  }
+
+  const isRoomFocused = editorMode || room?.id === (currentRoom ?? 0);
 
   return (
     <>
+      {visibleEntities.map((entity, index) => {
+        const Comp = renderComponent(entity?.type);
+        return (
+          <ErrorBoundary
+            key={entity?.type + "-" + index}
+            onError={handleRoomError}
+          >
+            <Comp
+              key={entity?.type + "-" + index}
+              {...entity}
+              room={room}
+              isRoomFocused={isRoomFocused}
+            />
+            ;
+          </ErrorBoundary>
+        );
+      })}
+
       {!editorMode && <RoomClickBox id={id} points={point} />}
       <RoomMesh points={point} />
-      <>{comps}</>
     </>
   );
 };

@@ -41,7 +41,17 @@ async function connect(websocket, auth_token) {
 
 let sharedConnection: Connection | undefined;
 
-export function HomeAssistantProvider({ websocket, token, children }) {
+interface HomeAssistantProviderProps {
+  websocket: string;
+  token: string;
+  children: React.ReactNode;
+}
+
+export function HomeAssistantProvider({
+  websocket,
+  token,
+  children,
+}: HomeAssistantProviderProps) {
   const { entities } = useStore();
 
   React.useEffect(() => {

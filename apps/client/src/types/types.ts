@@ -1,4 +1,6 @@
 import * as z from "zod"
+import { Floorplan } from "./Home";
+
 
 export const myRegistry = z.registry<{ description: string }>();
 
@@ -34,7 +36,6 @@ export const ActionSchema = z.discriminatedUnion("action", [
 	MoreInfoHass
 ]);
 
-
 export const IconEntitySchema = z.object({
 	type: z.literal("icon"),
 	entity_id: z.string(),
@@ -44,7 +45,7 @@ export const IconEntitySchema = z.object({
 	tap_action: ActionSchema.optional(),
 	double_tap_action: ActionSchema.optional(),
 	hold_action: ActionSchema.optional(),
-	position: PositionSchema.optional(),
+	position: PositionSchema,
 });
 
 export const TemperatureDisplayEntitySchema = z.object({
@@ -52,9 +53,9 @@ export const TemperatureDisplayEntitySchema = z.object({
 	font_size: z.number().optional(),
 	text_color: z.string().optional(),
 	top_sensor_id: z.string(),
-	bottom_sensor_id: z.string(),
+	bottom_sensor_id: z.string().optional(),
 	precision: z.number().optional(),
-	position: PositionSchema.optional(),
+	position: PositionSchema,
 	tap_action: ActionSchema.optional(),
 });
 
@@ -65,7 +66,7 @@ export const EntitySchema = z.discriminatedUnion("type", [
 
 export const RoomSchema = z.object({
 	id: z.string(),
-	alias: z.string().optional(),
+	alias: z.string(),
 	// ha_id: z.string().optional(),
 	tap_action: ActionSchema.optional(),
 	ui: z.object({
@@ -76,7 +77,7 @@ export const RoomSchema = z.object({
 });
 
 export const HomeConfigSchema = z.object({
-	title: z.string(),
+	name: z.string(),
 	buildings: z.array(z.string())
 })
 
@@ -114,6 +115,14 @@ export const UISchema = z.object({
 	cards: z.array(z.discriminatedUnion("type", [RoomCardSchema]))
 })
 
+export interface IBuildingData extends IBuilding {
+	floorplan: Floorplan;
+}
+
+export interface IHomeData {
+	title: string;
+	buildings: IBuildingData[];
+}
 
 
 export type IBuilding = z.infer<typeof BuildingSchema>;

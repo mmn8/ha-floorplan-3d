@@ -20,6 +20,7 @@ function ErrorDisplay({ error }: ErrorDisplay) {
 function Divider() {
   return <div className="w-auto border-border rounded-sm border-1 mt-2"></div>;
 }
+
 export function ErrorList() {
   const { errors } = useErrorStore();
 
@@ -36,7 +37,12 @@ export function ErrorList() {
   );
 }
 
-export default function ErrorModal({ isOpen, closeModal }) {
+interface ErrorModalProps {
+  isOpen: boolean;
+  closeModal: () => void;
+}
+
+export default function ErrorModal({ isOpen, closeModal }: ErrorModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={closeModal}>
       <ErrorList />

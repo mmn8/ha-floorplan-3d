@@ -14,12 +14,11 @@ export interface Floorplan {
 	observerCamera: [];
 	pieceOfFurniture: [];
 	property: Property[];
-	room: [];
+	room: FRoom[];
 	version: string;
 	wall: [];
 	wallHeight: string;
 }
-
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 

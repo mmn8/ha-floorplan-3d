@@ -1,11 +1,9 @@
 import { create } from "zustand";
-import { IHomeConfig, IBuilding, Floorplan, IMoreInfoAction } from "@/types/";
+import { IHomeData, IMoreInfoAction } from "@/types/";
 
 export interface HomeState {
-  home: IHomeConfig | null;
-  buildings: IBuilding[];
-  floorplans: Floorplan[];
-  setHome: (_home: IHomeConfig, _buildings: IBuilding[], _floorplans) => void;
+  home: IHomeData | null;
+  setHome: (_home: IHomeData) => void;
   reload: () => void;
   setReloadFunction: (_func: () => void) => void;
 }
@@ -14,11 +12,9 @@ export const useHomeStore = create<HomeState>((set) => ({
   home: null,
   buildings: [],
   floorplans: [],
-  setHome: (_home, _buildings, _floorplans) => {
+  setHome: (_home) => {
     set({
       home: _home,
-      buildings: _buildings,
-      floorplans: _floorplans,
     });
   },
   reload: null,

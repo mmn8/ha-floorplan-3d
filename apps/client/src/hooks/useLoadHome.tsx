@@ -3,7 +3,7 @@ import { useErrorStore, ErrorType } from "@/store/ErrorStore";
 import { XMLParser } from "fast-xml-parser";
 import { parse } from "yaml";
 import { BuildingSchema } from "@/types";
-import type { IHomeConfig, IBuilding } from "@/types";
+import type { IHomeConfig, IBuilding, IHomeData, IBuildingData } from "@/types";
 
 async function fetchResource<T>(url: string, parser?): Promise<T> {
   try {
@@ -62,18 +62,29 @@ export function useLoadHome(setIsLoading, setConfig) {
       const building = {
         title: parsedBuilding.title,
         floorplan_name: parsedBuilding.floorplan_name,
+        floorplan: parsedFloorplanXML,
         rooms: parsedBuilding.rooms,
-      };
+      } as IBuildingData;
+
+      const home = {
+        title: parsedHome.name,
+        buildings: [building],
+      } as IHomeData;
 
       //TODO: handle the safe parse :)
-      const result = BuildingSchema.safeParse(building);
+      const result = BuildingSchema.safeParse(parsedBuilding);
       if (!result.success) {
-        console.log(result.error);
+        console.log(result.error.issues);
+        result.error.issues.map((issue) => {
+          addError({
+            type: ErrorType.ZOD_ERROR,
+            title: issue.message,
+            description: issue.path.join("/"),
+          });
+        });
       }
 
-      setHome(parsedHome, [building], {
-        [floorplanName]: parsedFloorplanXML,
-      });
+      setHome(home);
     } catch (err) {
       const description = err.originalError
         ? String(err.originalError)
