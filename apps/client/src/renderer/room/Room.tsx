@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import { Shape } from "three";
 import * as THREE from "three";
 import { useRoom } from "@/hooks/";
@@ -54,23 +54,25 @@ const Room: React.FC<RoomProps> = ({ id, point }) => {
 
   return (
     <>
-      {visibleEntities.map((entity, index) => {
-        const Comp = renderComponent(entity?.type);
-        return (
-          <ErrorBoundary
-            key={entity?.type + "-" + index}
-            onError={handleRoomError}
-          >
-            <Comp
+      <Suspense>
+        {visibleEntities.map((entity, index) => {
+          const Comp = renderComponent(entity?.type);
+          return (
+            <ErrorBoundary
               key={entity?.type + "-" + index}
-              {...entity}
-              room={room}
-              isRoomFocused={isRoomFocused}
-            />
-            ;
-          </ErrorBoundary>
-        );
-      })}
+              onError={handleRoomError}
+            >
+              <Comp
+                key={entity?.type + "-" + index}
+                {...entity}
+                room={room}
+                isRoomFocused={isRoomFocused}
+              />
+              ;
+            </ErrorBoundary>
+          );
+        })}
+      </Suspense>
 
       {!editorMode && <RoomClickBox id={id} points={point} />}
       <RoomMesh points={point} />

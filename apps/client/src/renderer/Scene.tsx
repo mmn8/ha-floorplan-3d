@@ -9,6 +9,7 @@ interface BuildingProps {
 }
 
 function Building({ building_id }: BuildingProps) {
+  console.log("building rerendering");
   const building = useBuilding(building_id);
   const { addError } = useErrorStore();
 

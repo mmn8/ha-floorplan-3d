@@ -9,6 +9,7 @@ import Camera from "@/renderer/Camera";
 import { ScanEye } from "lucide-react";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
 import ErrorList from "@/components/ErrorList";
+import React from "react";
 
 export default function HomeView() {
   const isMobile = useIsMobile();
@@ -46,17 +47,19 @@ export default function HomeView() {
         <div className="flex-1 flex items-center justify-center  z-0">
           <div className="canvas-container  bg-[rgb(17,17,17)] w-screen h-screen touch-none">
             <Canvas
-              gl={{ antialias: false }}
-              dpr={[1, 1.5]}
+              shadows
+              dpr={[1, 2]}
               camera={{
                 fov: 45,
                 near: 0.1,
-                far: 100,
+                far: 1000000,
                 position: [10, 15, 20],
               }}
             >
+              <React.Suspense>
+                <Scene />
+              </React.Suspense>
               <Camera />
-              <Scene />
             </Canvas>
           </div>
         </div>

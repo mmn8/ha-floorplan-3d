@@ -80,38 +80,36 @@ const LightComp: React.FC<LightProps> = ({
   if (isPreview && !visible_preview) return <></>;
 
   return (
-    <>
-      <mesh>
-        <Html
-          zIndexRange={[10, 0]}
-          position={[position.x / 100, position.z / 100, position.y / 100]}
-        >
-          <motion.div
-            className="bg-[hsl(0,0%,5%)] p-2 rounded-full border-2 border-[hsl(0,0%,30%)] "
-            animate={{
-              rotate: rotation,
-              color:
-                hassEntity.state.toLowerCase() === "on" ? "#fbbf24" : "#9ca3af",
+    <mesh>
+      <Html
+        zIndexRange={[10, 0]}
+        position={[position.x / 100, position.z / 100, position.y / 100]}
+      >
+        <motion.div
+          className="bg-[hsl(0,0%,5%)] p-2 rounded-full border-2 border-[hsl(0,0%,30%)] "
+          animate={{
+            rotate: rotation,
+            color:
+              hassEntity.state.toLowerCase() === "on" ? "#fbbf24" : "#9ca3af",
 
-              scale: 1,
-              opacity: 1,
-            }}
-            initial={{ scale: 0.5, opacity: 0 }}
-            whileHover={{ scale: 1.1 }}
-            transition={{
-              duration: 0.4,
-              scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
-            }}
-            {...clickHandlers}
-          >
-            <DynamicIcon
-              name={(icon as IconName) ?? ("lightbulb" as IconName)}
-              size={24}
-              className="stroke-1 "
-            />
-          </motion.div>
-        </Html>
-      </mesh>
+            scale: 1,
+            opacity: 1,
+          }}
+          initial={{ scale: 0.5, opacity: 0 }}
+          whileHover={{ scale: 1.1 }}
+          transition={{
+            duration: 0.4,
+            scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+          }}
+          {...clickHandlers}
+        >
+          <DynamicIcon
+            name={(icon as IconName) ?? ("lightbulb" as IconName)}
+            size={24}
+            className="stroke-1 "
+          />
+        </motion.div>
+      </Html>
       {render_light && !editorMode && isRoomFocused && !isPreview && (
         <pointLight
           ref={lightRef}
@@ -124,7 +122,7 @@ const LightComp: React.FC<LightProps> = ({
           intensity={3}
         />
       )}
-    </>
+    </mesh>
   );
 };
 

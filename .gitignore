@@ -39,3 +39,4 @@ apps/backend/app-config
 rootfs/
 .secrets
 .dockerenv
+resources/
