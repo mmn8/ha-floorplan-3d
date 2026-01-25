@@ -1,4 +1,5 @@
-ZIP_URL="https://sf-eu-introserv-1.dl.sourceforge.net/project/sweethome3d/SweetHome3D-source/SweetHome3D-7.5-src/SweetHome3D-7.5-src.zip?viasf=1"
+#TODO: Better solution for downloading the base furniture
+ZIP_URL="https://sourceforge.net/projects/sweethome3d/files/SweetHome3D-source/SweetHome3D-7.5-src/SweetHome3D-7.5-src.zip/download"
 
 DOWNLOAD_PATH=download.zip
 
