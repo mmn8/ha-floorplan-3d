@@ -47,6 +47,6 @@ jobs:
             --${{ matrix.arch }}  \
             --target /data \
             --docker-hub "ghcr.io/${{ github.repository_owner }}" \
-            --image ha-floorplan-3d \
+            --image ha-floorplan-3d-{arch} \
             --addon \
             --version ${{ env.RELEASE_VERSION }}
