@@ -1,3 +1,5 @@
+ARG BUILD_FROM
+
 # ---- Build frontend ----
 FROM node:latest AS frontend
 WORKDIR /client
@@ -21,7 +23,6 @@ COPY ./apps/backend .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /backend-exec
 
 # ---- Final HA runtime image ----
-ARG BUILD_FROM
 FROM $BUILD_FROM
 
 WORKDIR /app
