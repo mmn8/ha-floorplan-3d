@@ -2,7 +2,7 @@ name: "Amazing 3D floorplan!"
 description: "My first real looooladd-on!"
 slug: "hello_world2"
 image: ghcr.io/mmn8/ha-floorplan-3d
-version: "69.69.69"
+version: "0.0.3"
 init: false
 arch:
   - aarch64
