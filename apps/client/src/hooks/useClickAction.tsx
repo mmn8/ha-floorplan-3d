@@ -4,7 +4,7 @@ import { IAction } from "@/types";
 export const DefaultAction = (entity_id: string) => {
   return {
     action: "call-service",
-    service: "light.toggle",
+    service: `${entity_id.split(".")[0] || "light"}.toggle`,
     target: {
       entity_id: entity_id,
     },

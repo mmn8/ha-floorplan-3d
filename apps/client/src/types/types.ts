@@ -2,8 +2,6 @@ import * as z from "zod"
 import { Floorplan } from "./Home";
 
 
-export const myRegistry = z.registry<{ description: string }>();
-
 export const PositionSchema = z.object({
 	x: z.number(),
 	y: z.number(),
@@ -31,21 +29,21 @@ export const CallServiceActionSchema = z.object({
 });
 
 export const ActionSchema = z.discriminatedUnion("action", [
-	MoreInfoActionSchema,
-	CallServiceActionSchema,
-	MoreInfoHass
+	MoreInfoActionSchema.describe("Action to show current room's bottom sheet"),
+	CallServiceActionSchema.describe("Call Home Assistant service"),
+	MoreInfoHass.describe("Show Home Assistant more info dialog")
 ]);
 
 export const IconEntitySchema = z.object({
 	type: z.literal("icon"),
-	entity_id: z.string(),
-	icon: z.string().optional(),
-	render_light: z.boolean().optional().default(true),
-	visible_preview: z.boolean().optional().default(false),
+	entity_id: z.string().describe("Entity whose state is used"),
+	icon: z.string().optional().describe("A icon shown (Lucide Icons)"),
+	render_light: z.boolean().optional().default(true).describe("Is light rendered. False for example sockets"),
+	visible_preview: z.boolean().optional().default(false).describe("Is shown on preview mode"),
 	tap_action: ActionSchema.optional(),
 	double_tap_action: ActionSchema.optional(),
 	hold_action: ActionSchema.optional(),
-	position: PositionSchema,
+	position: PositionSchema.describe("Position in 3d space"),
 });
 
 export const TemperatureDisplayEntitySchema = z.object({
@@ -55,7 +53,7 @@ export const TemperatureDisplayEntitySchema = z.object({
 	top_sensor_id: z.string(),
 	bottom_sensor_id: z.string().optional(),
 	precision: z.number().optional(),
-	position: PositionSchema,
+	position: PositionSchema.describe("Position in 3d space"),
 	tap_action: ActionSchema.optional(),
 });
 
@@ -65,39 +63,38 @@ export const EntitySchema = z.discriminatedUnion("type", [
 ]);
 
 export const RoomSchema = z.object({
-	id: z.string(),
-	alias: z.string(),
-	// ha_id: z.string().optional(),
+	id: z.string().describe("Sweet Home 3D room uuid"),
+	alias: z.string().describe("Display name used e.g in bottom room selector"),
 	tap_action: ActionSchema.optional(),
 	ui: z.object({
 		path: z.string()
-	}).optional(),
+	}).optional().describe("Path to where bottom sheet ui is loaded"),
 	double_tap_action: ActionSchema.optional(),
-	entities: z.array(EntitySchema).optional(),
+	entities: z.array(EntitySchema).optional().describe("List of entities associated with room"),
 });
 
 export const HomeConfigSchema = z.object({
 	name: z.string(),
-	buildings: z.array(z.string())
+	buildings: z.array(z.string()).describe("Path to building.yml file")
 })
 
 export const DefaultRoomsSchema = z.array(z.object({
-	user_name: z.string(),
-	room_id: z.string(),
+	user_name: z.string().describe("Home assistant username"),
+	room_id: z.string().describe("Sweet home 3D room uuid"),
 }))
 
 
 export const BuildingSchema = z.object({
 	title: z.string(),
 	floorplan_name: z.string().describe("Path where buildings floorplan is loaded"),
-	default_rooms: DefaultRoomsSchema.optional(),
+	default_rooms: DefaultRoomsSchema.optional().describe("What room to show first depending on user"),
 	rooms: z.array(RoomSchema),
 });
 
 
 export const SceneSchema = z.object({
-	icon: z.string().min(1, "Scene icon is required."),
-	title: z.string().min(1, "Scene title is required."),
+	icon: z.string().min(1, "Icon shown. (Lucide icons)"),
+	title: z.string().min(1, "Title shown"),
 	tap_action: ActionSchema.optional(),
 	double_tap_action: ActionSchema.optional(),
 	hold_action: ActionSchema.optional()
@@ -106,17 +103,18 @@ export const SceneSchema = z.object({
 
 export const EntityCard = z.object({
 	entity_id: z.string(),
-	size: z.enum(["md", "sm", "wide"]),
+	size: z.enum(["md", "sm", "wide"]).describe("Size of card shown on bottom sheet"),
 	tap_action: ActionSchema.optional(),
 	double_tap_action: ActionSchema.optional(),
 	hold_action: ActionSchema.optional()
 })
 
 export const RoomCardSchema = z.object({
-	type: z.literal("room"), title: z.string().min(1).meta({ description: "testi3ng" }),
+	type: z.literal("room"),
+	title: z.string().min(1).describe("Name shown on bottom sheet"),
 	scenes: z.array(SceneSchema).min(1),
 	entities: z.array(EntityCard).min(1),
-}).strict().register(myRegistry, { description: "xd" });
+}).describe("Card with scene select and grid of entities displayed on bottom sheet")
 
 export const UISchema = z.object({
 	cards: z.array(z.discriminatedUnion("type", [RoomCardSchema]))

@@ -3,19 +3,9 @@ import { motion } from "framer-motion";
 import { Lightbulb } from "lucide-react";
 import { useEntity } from "@/utils/HaConnect";
 import { useEvaluateAction } from "@/utils/EvaluateAction";
-import { useClickAction } from "@/hooks/useClickAction";
+import { useClickAction, DefaultAction } from "@/hooks/useClickAction";
 import { IDeviceCard, IAction } from "@/types";
 import { HassEntity } from "home-assistant-js-websocket";
-
-const default_action = (entity_id) => {
-  return {
-    action: "call-service",
-    service: "light.toggle",
-    target: {
-      entity_id: entity_id,
-    },
-  } as IAction;
-};
 
 const card = tv({
   base: "flex pl-2 flex-start bg-normal rounded-xl border-1 border-border shadow-md shadow-[hsl(0,0%,10%)]",
@@ -129,8 +119,7 @@ export function DeviceCard({
   const { evaluateAction } = useEvaluateAction();
 
   const clickHandlers = useClickAction({
-    onSingleClick: () =>
-      evaluateAction(tap_action ?? default_action(entity_id)),
+    onSingleClick: () => evaluateAction(tap_action ?? DefaultAction(entity_id)),
     onDoubleClick: () => {
       evaluateAction(double_tap_action);
     },
