@@ -1,5 +1,5 @@
-name: GitHub Actions Demo
-run-name: is testing out GitHub Actions 🚀
+name: Build and publish containr 
+run-name: Building new package on tag
 on:
   push:
     tags:        
