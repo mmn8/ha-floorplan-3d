@@ -122,76 +122,6 @@ List of all the possible options to configure the app
     * [Scene](#scene)
     * [EntityCard](#entitycard)
 
-## Building
-
-_Object containing the following properties:_
-
-| Property                  | Description                              | Type                           |
-| :------------------------ | :--------------------------------------- | :----------------------------- |
-| **`title`** (\*)          |                                          | `string`                       |
-| **`floorplan_name`** (\*) | Path where buildings floorplan is loaded | `string`                       |
-| **`rooms`** (\*)          |                                          | _Array of [Room](#room) items_ |
-
-_(\*) Required._
-
-## Room
-
-_Object containing the following properties:_
-
-| Property            | Type                                                                 |
-| :------------------ | :------------------------------------------------------------------- |
-| **`id`** (\*)       | `string`                                                             |
-| `alias`             | `string`                                                             |
-| `tap_action`        | [Action](#action)                                                    |
-| `ui`                | _Object with properties:_<ul><li>**`path`** (\*): `string`</li></ul> |
-| `double_tap_action` | [Action](#action)                                                    |
-| `entities`          | _Array of [Entity](#entity) items_                                   |
-
-_(\*) Required._
-
-
-## Entity
-
-_Union of the following possible types:_
-
-- [IconEntity](#iconentity)
-- [TemperatureDisplayEntity](#temperaturedisplayentity)
-
-## IconEntity
-
-_Object containing the following properties:_
-
-| Property             | Type                  | Default |
-| :------------------- | :-------------------- | :------ |
-| **`type`** (\*)      | `'icon'`              |         |
-| **`entity_id`** (\*) | `string`              |         |
-| `icon`               | `string`              |         |
-| `render_light`       | `boolean`             | `true`  |
-| `visible_preview`    | `boolean`             | `false` |
-| `tap_action`         | [Action](#action)     |         |
-| `double_tap_action`  | [Action](#action)     |         |
-| `hold_action`        | [Action](#action)     |         |
-| `position`           | [Position](#position) |         |
-
-_(\*) Required._
-
-## TemperatureDisplayEntity
-
-_Object containing the following properties:_
-
-| Property                    | Type                   |
-| :-------------------------- | :--------------------- |
-| **`type`** (\*)             | `'temperatureDisplay'` |
-| `font_size`                 | `number`               |
-| `text_color`                | `string`               |
-| **`top_sensor_id`** (\*)    | `string`               |
-| **`bottom_sensor_id`** (\*) | `string`               |
-| `precision`                 | `number`               |
-| `position`                  | [Position](#position)  |
-| `tap_action`                | [Action](#action)      |
-
-_(\*) Required._
-
 ## Action
 
 _Union of the following possible types:_
@@ -199,6 +129,19 @@ _Union of the following possible types:_
 - [MoreInfoAction](#moreinfoaction)
 - [CallServiceAction](#callserviceaction)
 - [MoreInfoHass](#moreinfohass)
+
+## Building
+
+_Object containing the following properties:_
+
+| Property                  | Description                               | Type                           |
+| :------------------------ | :---------------------------------------- | :----------------------------- |
+| **`title`** (\*)          |                                           | `string`                       |
+| **`floorplan_name`** (\*) | Path where buildings floorplan is loaded  | `string`                       |
+| `default_rooms`           | What room to show first depending on user | [DefaultRooms](#defaultrooms)  |
+| **`rooms`** (\*)          |                                           | _Array of [Room](#room) items_ |
+
+_(\*) Required._
 
 ## CallServiceAction
 
@@ -209,6 +152,67 @@ _Object containing the following properties:_
 | **`action`** (\*)  | `'call-service'`                                                          |
 | **`service`** (\*) | `string`                                                                  |
 | **`target`** (\*)  | _Object with properties:_<ul><li>**`entity_id`** (\*): `string`</li></ul> |
+
+_(\*) Required._
+
+## DefaultRooms
+
+_Array of objects containing the following properties:_
+
+| Property             | Description             | Type     |
+| :------------------- | :---------------------- | :------- |
+| **`user_name`** (\*) | Home assistant username | `string` |
+| **`room_id`** (\*)   | Sweet home 3D room uuid | `string` |
+
+_(\*) Required._
+
+## EntityCard
+
+_Object containing the following properties:_
+
+| Property             | Description                        | Type                     |
+| :------------------- | :--------------------------------- | :----------------------- |
+| **`entity_id`** (\*) |                                    | `string`                 |
+| **`size`** (\*)      | Size of card shown on bottom sheet | `'md' \| 'sm' \| 'wide'` |
+| `tap_action`         |                                    | [Action](#action)        |
+| `double_tap_action`  |                                    | [Action](#action)        |
+| `hold_action`        |                                    | [Action](#action)        |
+
+_(\*) Required._
+
+## Entity
+
+_Union of the following possible types:_
+
+- [IconEntity](#iconentity)
+- [TemperatureDisplayEntity](#temperaturedisplayentity)
+
+## HomeConfig
+
+_Object containing the following properties:_
+
+| Property             | Description               | Type            |
+| :------------------- | :------------------------ | :-------------- |
+| **`name`** (\*)      |                           | `string`        |
+| **`buildings`** (\*) | Path to building.yml file | `Array<string>` |
+
+_(\*) Required._
+
+## IconEntity
+
+_Object containing the following properties:_
+
+| Property             | Description                                  | Type                  | Default |
+| :------------------- | :------------------------------------------- | :-------------------- | :------ |
+| **`type`** (\*)      |                                              | `'icon'`              |         |
+| **`entity_id`** (\*) | Entity whose state is used                   | `string`              |         |
+| `icon`               | A icon shown (Lucide Icons)                  | `string`              |         |
+| `render_light`       | Is light rendered. False for example sockets | `boolean`             | `true`  |
+| `visible_preview`    | Is shown on preview mode                     | `boolean`             | `false` |
+| `tap_action`         |                                              | [Action](#action)     |         |
+| `double_tap_action`  |                                              | [Action](#action)     |         |
+| `hold_action`        |                                              | [Action](#action)     |         |
+| **`position`** (\*)  | Position in 3d space                         | [Position](#position) |         |
 
 _(\*) Required._
 
@@ -233,18 +237,6 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
-
-## HomeConfig
-
-_Object containing the following properties:_
-
-| Property             | Type            |
-| :------------------- | :-------------- |
-| **`title`** (\*)     | `string`        |
-| **`buildings`** (\*) | `Array<string>` |
-
-_(\*) Required._
-
 ## Position
 
 _Object containing the following properties:_
@@ -257,29 +249,35 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
-## UI
-
-_Object containing the following properties:_
-
-| Property         | Type                           |
-| :--------------- | :----------------------------- |
-| **`cards`** (\*) | `Array<[RoomCard](#roomcard)>` |
-
-_(\*) Required._
-
 ## RoomCard
 
+Card with scene select and grid of entities displayed on bottom sheet
+
 _Object containing the following properties:_
 
-| Property            | Description | Type                                                  |
-| :------------------ | :---------- | :---------------------------------------------------- |
-| **`type`** (\*)     |             | `'room'`                                              |
-| **`title`** (\*)    | testi3ng    | `string` (_min length: 1_)                            |
-| **`scenes`** (\*)   |             | _Array of at least 1 [Scene](#scene) items_           |
-| **`entities`** (\*) |             | _Array of at least 1 [EntityCard](#entitycard) items_ |
+| Property            | Description                | Type                                                  |
+| :------------------ | :------------------------- | :---------------------------------------------------- |
+| **`type`** (\*)     |                            | `'room'`                                              |
+| **`title`** (\*)    | Name shown on bottom sheet | `string` (_min length: 1_)                            |
+| **`scenes`** (\*)   |                            | _Array of at least 1 [Scene](#scene) items_           |
+| **`entities`** (\*) |                            | _Array of at least 1 [EntityCard](#entitycard) items_ |
 
 _(\*) Required._
 
+## Room
+
+_Object containing the following properties:_
+
+| Property            | Description                                   | Type                                                                 |
+| :------------------ | :-------------------------------------------- | :------------------------------------------------------------------- |
+| **`id`** (\*)       | Sweet Home 3D room uuid                       | `string`                                                             |
+| **`alias`** (\*)    | Display name used e.g in bottom room selector | `string`                                                             |
+| `tap_action`        |                                               | [Action](#action)                                                    |
+| `ui`                | Path to where bottom sheet ui is loaded       | _Object with properties:_<ul><li>**`path`** (\*): `string`</li></ul> |
+| `double_tap_action` |                                               | [Action](#action)                                                    |
+| `entities`          | List of entities associated with room         | _Array of [Entity](#entity) items_                                   |
+
+_(\*) Required._
 
 ## Scene
 
@@ -295,17 +293,30 @@ _Object containing the following properties:_
 
 _(\*) Required._
 
-## EntityCard
+## TemperatureDisplayEntity
 
 _Object containing the following properties:_
 
-| Property             | Type                     |
-| :------------------- | :----------------------- |
-| **`entity_id`** (\*) | `string`                 |
-| **`size`** (\*)      | `'md' \| 'sm' \| 'wide'` |
-| `tap_action`         | [Action](#action)        |
-| `double_tap_action`  | [Action](#action)        |
-| `hold_action`        | [Action](#action)        |
+| Property                 | Description          | Type                   |
+| :----------------------- | :------------------- | :--------------------- |
+| **`type`** (\*)          |                      | `'temperatureDisplay'` |
+| `font_size`              |                      | `number`               |
+| `text_color`             |                      | `string`               |
+| **`top_sensor_id`** (\*) |                      | `string`               |
+| `bottom_sensor_id`       |                      | `string`               |
+| `precision`              |                      | `number`               |
+| **`position`** (\*)      | Position in 3d space | [Position](#position)  |
+| `tap_action`             |                      | [Action](#action)      |
+
+_(\*) Required._
+
+## UI
+
+_Object containing the following properties:_
+
+| Property         | Type                           |
+| :--------------- | :----------------------------- |
+| **`cards`** (\*) | `Array<[RoomCard](#roomcard)>` |
 
 _(\*) Required._
 
