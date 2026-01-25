@@ -1,7 +1,7 @@
 name: "Ha Floorplan 3D"
 description: "A floorplan renderer"
 slug: "ha-floorplan-3d"
-image: ghcr.io/mmn8/ha-floorplan-3d
+image: "ghcr.io/mmn8/ha-floorplan-3d-{arch}"
 version: "0.0.4"
 init: false
 arch:
