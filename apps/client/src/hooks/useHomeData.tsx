@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useHomeStore } from "@/store";
 import type { IBuildingData, IRoom } from "@/types";
 
+// Reason for "building id" field is for future support for multiple buildings
 export function useBuilding(building: number): IBuildingData | undefined {
   const { home } = useHomeStore();
   return home.buildings[building];

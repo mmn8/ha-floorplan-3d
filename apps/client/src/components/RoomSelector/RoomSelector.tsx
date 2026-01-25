@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useEffectEvent } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
-import { useRooms, useCurrentRoom } from "@/hooks/";
+import { useRooms, useCurrentRoom, useBuilding } from "@/hooks/";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 import type { IRoom } from "@/types";
+import { useHassUser } from "@/utils/HaConnect";
 
 //TODO: Allow for actual free scrolling
 export const RoomSelector = () => {
@@ -16,6 +17,27 @@ export const RoomSelector = () => {
 
   const ref = useRef(null);
   const real_rooms = useRooms();
+
+  const building = useBuilding(0);
+  const user = useHassUser();
+
+  const onLoad = useEffectEvent((user) => {
+    if (!user) return;
+    if (!building.default_rooms) return;
+    const default_room = building?.default_rooms.find(
+      (entry) => entry.user_name === user?.name,
+    );
+
+    if (default_room) {
+      setCurrentRoom(default_room.room_id);
+    }
+  });
+
+  useEffect(() => {
+    onLoad(user);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const onRoomChange = useEffectEvent((currentRoom) => {
     const currentRoomIndex: number = real_rooms.findIndex((room: IRoom) => {

@@ -64,6 +64,7 @@ export function useLoadHome(setIsLoading, setConfig) {
         floorplan_name: parsedBuilding.floorplan_name,
         floorplan: parsedFloorplanXML,
         rooms: parsedBuilding.rooms,
+        default_rooms: parsedBuilding.default_rooms,
       } as IBuildingData;
 
       const home = {

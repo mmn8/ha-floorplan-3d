@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useBuilding } from "@/hooks/useBuilding";
+import { useBuilding } from "@/hooks";
 import ErrorBoundary from "@/utils/3DErrorBoundary";
 import { renderComponent } from "@/renderer/Components";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
@@ -9,7 +9,6 @@ interface BuildingProps {
 }
 
 function Building({ building_id }: BuildingProps) {
-  console.log("building rerendering");
   const building = useBuilding(building_id);
   const { addError } = useErrorStore();
 

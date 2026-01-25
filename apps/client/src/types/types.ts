@@ -81,9 +81,16 @@ export const HomeConfigSchema = z.object({
 	buildings: z.array(z.string())
 })
 
+export const DefaultRoomsSchema = z.array(z.object({
+	user_name: z.string(),
+	room_id: z.string(),
+}))
+
+
 export const BuildingSchema = z.object({
 	title: z.string(),
 	floorplan_name: z.string().describe("Path where buildings floorplan is loaded"),
+	default_rooms: DefaultRoomsSchema.optional(),
 	rooms: z.array(RoomSchema),
 });
 
@@ -138,6 +145,7 @@ export type IDeviceCard = z.infer<typeof EntityCard>
 export type IUISchema = z.infer<typeof UISchema>
 export type IMoreInfoAction = z.infer<typeof MoreInfoActionSchema>
 export type ITemperatureDisplay = z.infer<typeof TemperatureDisplayEntitySchema>
+export type IDefaultRoomConfig = z.infer<typeof DefaultRoomsSchema>
 
 
 

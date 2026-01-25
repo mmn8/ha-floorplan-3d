@@ -3,7 +3,7 @@ import { parse } from "yaml";
 // TODO: Improve this
 export async function loadUI(ui_file: string) {
   async function f() {
-    const resp = await fetch("./config/" + ui_file);
+    const resp = await fetch("./config/" + ui_file, { cache: "reload" });
     const ui = await resp.text();
     let parsed = undefined;
 

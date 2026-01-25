@@ -5,6 +5,7 @@ import {
   HassEntities,
   getStates,
   Connection,
+  getUser,
 } from "home-assistant-js-websocket";
 import React from "react";
 import { useStore } from "./hooks";
@@ -34,7 +35,10 @@ async function connect(websocket, auth_token) {
     initialEntities[state.entity_id] = state;
   });
 
+  const user = await getUser(connection);
+
   useStore.getState().setEntities(initialEntities);
+  useStore.getState().setUser(user);
 
   return connection;
 }
