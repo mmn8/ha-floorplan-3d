@@ -1,6 +1,6 @@
-name: "Amazing 3D floorplan!"
-description: "My first real looooladd-on!"
-slug: "hello_world2"
+name: "Ha Floorplan 3D"
+description: "A floorplan renderer"
+slug: "ha-floorplan-3d"
 image: ghcr.io/mmn8/ha-floorplan-3d
 version: "0.0.3"
 init: false
@@ -11,7 +11,7 @@ startup: services
 ingress: true
 ingress_panel: true
 panel_icon: mdi:cog
-panel_title: "My Add-on"
+panel_title: "Ha Floorplan 3D"
 map:
  - type: homeassistant_config
    read_only: False
