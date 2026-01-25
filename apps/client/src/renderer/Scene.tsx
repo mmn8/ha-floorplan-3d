@@ -32,7 +32,7 @@ function Building({ building_id }: BuildingProps) {
 
         function onError(error) {
           addError({
-            type: ErrorType.FATAL,
+            type: ErrorType.OTHER,
             title: error,
             description: item.key,
           });

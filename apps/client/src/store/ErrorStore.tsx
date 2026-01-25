@@ -3,6 +3,7 @@ import { create } from "zustand";
 export enum ErrorType {
   FATAL,
   ROOM_ERROR,
+  OTHER,
   ZOD_ERROR,
 }
 
