@@ -1,12 +1,9 @@
 name: GitHub Actions Demo
 run-name: is testing out GitHub Actions 🚀
 on:
-  workflow_dispatch:  # This enables the manual button
-    inputs:
-      debug_mode:
-        description: 'Run with extra logs?'
-        default: 'false'
-
+  push:
+    tags:        
+      - '*'          
 jobs:
   build:
     runs-on: ubuntu-latest
