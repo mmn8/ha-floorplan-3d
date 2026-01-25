@@ -7,15 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v6
-      - name: Publish
-        uses: home-assistant/builder@2025.11.0
-        with:
-          args: |
-            --target . \
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: run
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
