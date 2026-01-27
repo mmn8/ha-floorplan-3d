@@ -2,23 +2,14 @@ import { Home } from "lucide-react";
 import React from "react";
 import { ProgressButton } from "@/components/Button";
 import { useNavigate } from "react-router";
-import { useLoadHome } from "@/hooks/useLoadHome";
-import type { Config } from "@/app/Home";
+import { useQueryClient } from "@tanstack/react-query";
 
 //TODO: Improve this from this alpha state
-interface SetupWizardProps {
-  setConfig: (conf: Config) => void;
-  config: Config;
-}
-export default function SetupWizard({ setConfig, config }: SetupWizardProps) {
+export default function SetupWizard() {
   const [loading, setLoading] = React.useState(false);
   const fileInputRef = React.useRef(undefined);
   const navigate = useNavigate();
-
-  const fetchHomeData = useLoadHome(
-    () => {},
-    () => {},
-  );
+  const queryClient = useQueryClient();
 
   const handleFileChange = async (e) => {
     setLoading(true);
@@ -37,8 +28,7 @@ export default function SetupWizard({ setConfig, config }: SetupWizardProps) {
 
       if (response.ok) {
         response.json().then(() => {
-          setConfig({ ...config, configured: true });
-          fetchHomeData();
+          queryClient.invalidateQueries({ refetchType: "all" });
           navigate("./editor");
         });
 

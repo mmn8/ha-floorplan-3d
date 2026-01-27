@@ -6,6 +6,7 @@ import ErrorBoundary from "@/utils/3DErrorBoundary";
 import Editor from "@/pages/EditorView";
 import HomeView from "@/pages/HomeView";
 import { HomeAssistantProvider } from "@/utils/HaConnect";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function calculateBaseIngress() {
   const parts = window.location.pathname.split("/");
@@ -27,6 +28,7 @@ function resolveWebsocketParams() {
 
   return { websocket, auth_token };
 }
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   const basename = calculateBaseIngress();
@@ -35,25 +37,27 @@ const App: React.FC = () => {
   const { websocket, auth_token } = resolveWebsocketParams();
   return (
     <>
-      <ErrorBoundary
-        onError={() => {}}
-        fallback={
-          <p>
-            A fatal and unkown error has occured. Please check your
-            configuration. There is also a good chance that the fault is not
-            yours.
-          </p>
-        }
-      >
-        <Home>
-          <HomeAssistantProvider websocket={websocket} token={auth_token}>
-            <Routes>
-              <Route path="/*" element={<HomeView />} />
-              <Route path="/editor" element={<Editor />} />
-            </Routes>
-          </HomeAssistantProvider>
-        </Home>
-      </ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ErrorBoundary
+          onError={() => {}}
+          fallback={
+            <p>
+              A fatal and unkown error has occured. Please check your
+              configuration. There is also a good chance that the fault is not
+              yours.
+            </p>
+          }
+        >
+          <Home>
+            <HomeAssistantProvider websocket={websocket} token={auth_token}>
+              <Routes>
+                <Route path="/*" element={<HomeView />} />
+                <Route path="/editor" element={<Editor />} />
+              </Routes>
+            </HomeAssistantProvider>
+          </Home>
+        </ErrorBoundary>
+      </QueryClientProvider>
     </>
   );
 };

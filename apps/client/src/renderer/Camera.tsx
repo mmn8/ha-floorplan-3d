@@ -2,7 +2,7 @@ import { useSpring, animated } from "@react-spring/three";
 import { useEffect, useRef, useCallback, useEffectEvent } from "react";
 import { PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
-import { useHomeStore } from "@/store";
+import { useHomeData } from "@/hooks";
 import { useCurrentRoom } from "@/hooks";
 import type { Point, FRoom } from "@/types";
 import { XYCameraControls } from "./XYCameraControls";
@@ -26,12 +26,12 @@ const getRoomCenterAndZoom = (points: THREE.Vector3[], cameraFov = 45) => {
 
 export default function Camera() {
   const { currentRoom, isPreview } = useCurrentRoom();
-  const { home } = useHomeStore();
+  const { data } = useHomeData();
   const camera = useRef<THREE.PerspectiveCamera>(null);
 
   const currentlyFocusedRoomPoints = () => {
-    for (const index in home.buildings) {
-      const room = home.buildings[index].floorplan.room.find(
+    for (const index in data.buildings) {
+      const room = data.buildings[index].floorplan.room.find(
         (room) => room.id === currentRoom,
       );
 
@@ -70,7 +70,7 @@ export default function Camera() {
   const onFocusChange = useEffectEvent(
     (currentRoom: string, isPreview: boolean) => {
       if (isPreview) {
-        const floorplan = home.buildings[0].floorplan;
+        const floorplan = data?.buildings?.[0].floorplan;
         const points = floorplan.room.flatMap((d: FRoom) =>
           d.point.map((p: Point) => new THREE.Vector3(p.x / 100, p.y / 100, 0)),
         );

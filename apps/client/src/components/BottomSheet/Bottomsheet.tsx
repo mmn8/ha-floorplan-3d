@@ -9,12 +9,13 @@ import {
 } from "framer-motion";
 import { useBottomSheetStore } from "@/store";
 import { useCurrentRoom, useRoom } from "@/hooks";
-import { loadUI } from "@/hooks/useUI";
+import { useUI } from "@/hooks/useUI";
 import { renderCard } from "@/renderer/Components";
 import { ErrorList } from "@/components/ErrorList";
 import ErrorBoundary from "@/utils/3DErrorBoundary";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
-import { IUISchema } from "@/types";
+import { IUISchema, ISceneIcon } from "@/types";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 function calculateConstraints(targetRef) {
   const rect = targetRef.current.getBoundingClientRect();
@@ -28,10 +29,10 @@ export const BottomSheetContainer = () => {
   const { currentRoom } = useCurrentRoom();
   const { addError } = useErrorStore();
   const room = useRoom(currentRoom);
+  const cardsData = useUI(room?.ui?.path);
 
   const y = useMotionValue(0);
   const targetRef = useRef<HTMLDivElement>(null);
-  const [cardsData, setCardsData] = useState<IUISchema>(null);
   const [constraints, setConstraints] = React.useState({
     top: 0.25 * window.innerHeight,
     bottom: 0,
@@ -45,24 +46,6 @@ export const BottomSheetContainer = () => {
       damping: 30,
     });
   });
-
-  useEffect(() => {
-    let ignore = false;
-
-    const fetchData = async () => {
-      if (!room?.ui?.path) {
-        setCardsData(null);
-        return;
-      }
-      const ui = await loadUI(room?.ui?.path);
-      if (!ignore && ui?.cards) setCardsData(ui);
-    };
-
-    fetchData();
-    return () => {
-      ignore = true;
-    };
-  }, [room?.ui?.path]);
 
   useEffect(() => {
     if (!targetRef.current) return;
@@ -96,6 +79,7 @@ export const BottomSheetContainer = () => {
         y={y}
         constraints={constraints}
         onDragEnd={handleDragEnd}
+        sceneData={[]}
         targetRef={targetRef}
       >
         <ErrorBoundary
@@ -106,8 +90,8 @@ export const BottomSheetContainer = () => {
             </div>
           }
         >
-          {cardsData &&
-            cardsData.cards.map((card, index) => {
+          {cardsData?.data &&
+            cardsData?.data?.cards?.map((card, index) => {
               const Comp = renderCard(card?.type);
               return Comp && <Comp key={`${card.type}-${index}`} {...card} />;
             })}
@@ -122,7 +106,36 @@ interface BottomSheetViewProps {
   constraints: { top: number; bottom: number };
   onDragEnd: (_, info: PanInfo) => void;
   targetRef: React.Ref<HTMLDivElement>;
+  sceneData: ISceneIcon[];
   children?: React.ReactNode;
+}
+
+interface SceneSelectProps {
+  scenes: ISceneIcon[];
+}
+
+function Icon() {
+  return (
+    <div className="flex text-text flex-col items-center text-xs">
+      <div className="w-10  h-10 rounded-full flex justify-center items-center text-text border-[hsl(0,0%,30%)] border-0">
+        <DynamicIcon name="tv" size={26} className="stroke-1 " />
+      </div>
+
+      <p className="mt-[-4px]">TV</p>
+    </div>
+  );
+}
+
+function SceneSelect({ scenes }: SceneSelectProps) {
+  return (
+    <>
+      <div className="h-14 w-screen flex justify-center gap-20 pl-4 pr-4">
+        {scenes.map((scene, index) => {
+          return <Icon key={index} {...scene} />;
+        })}
+      </div>
+    </>
+  );
 }
 
 const BottomSheetView = ({
@@ -130,6 +143,7 @@ const BottomSheetView = ({
   constraints,
   onDragEnd,
   targetRef,
+  sceneData,
   children,
 }: BottomSheetViewProps) => {
   return (
@@ -154,8 +168,9 @@ const BottomSheetView = ({
           </motion.div>
           <div
             ref={targetRef}
-            className={`h-16 bottom-0  w-screen absolute z-10   text-text flex items-center justify-center bg-dark  pointer-events-auto  `}
+            className={`h-28 bottom-0  w-screen absolute z-10   text-text flex items-center justify-center bg-dark  pointer-events-auto flex-col `}
           >
+            <SceneSelect scenes={sceneData} />
             <RoomSelector />
           </div>
         </div>

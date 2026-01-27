@@ -1,29 +1,5 @@
 import { create } from "zustand";
-import { IHomeData, IMoreInfoAction } from "@/types/";
-
-export interface HomeState {
-  home: IHomeData | null;
-  setHome: (_home: IHomeData) => void;
-  reload: () => void;
-  setReloadFunction: (_func: () => void) => void;
-}
-
-export const useHomeStore = create<HomeState>((set) => ({
-  home: null,
-  buildings: [],
-  floorplans: [],
-  setHome: (_home) => {
-    set({
-      home: _home,
-    });
-  },
-  reload: null,
-  setReloadFunction: (_func) => {
-    set({
-      reload: _func,
-    });
-  },
-}));
+import { IMoreInfoAction } from "@/types/";
 
 interface BottomSheetState {
   isOpen: boolean;

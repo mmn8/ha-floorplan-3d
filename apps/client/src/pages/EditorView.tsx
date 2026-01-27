@@ -6,26 +6,9 @@ import Scene from "@/renderer/Scene";
 import { useConfigStore } from "@/store";
 import Toolbar from "@/components/Toolbar";
 import ErrorList from "@/components/ErrorList";
-import { useLoadHome } from "@/hooks/useLoadHome";
-import { useHomeStore } from "@/store";
+// import { useHomeData } from "@/hooks";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
-import * as THREE from "three";
-import { Point, FRoom } from "@/types";
-
-const getRoomCenterAndZoom = (points: THREE.Vector3[], cameraFov = 45) => {
-  const box = new THREE.Box3();
-  points.forEach((point) => box.expandByPoint(point));
-
-  const center = box.getCenter(new THREE.Vector3());
-  const size = box.getSize(new THREE.Vector3());
-  const maxDim = Math.max(size.x, size.y, size.z);
-
-  const fov = cameraFov * (Math.PI / 180);
-  const offset = 1.25;
-  const cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * offset;
-
-  return new THREE.Vector3(center.x, cameraZ, center.y);
-};
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditorView() {
   // const { reload } = useHomeStore();
@@ -33,25 +16,26 @@ export default function EditorView() {
   const [lastRefreshed, setLastRefreshed] = useState(Date.now());
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const { errors } = useErrorStore();
-  const { home } = useHomeStore();
   const [version, setVersion] = useState(0);
-
-  const fetchHomeData = useLoadHome(
-    () => {},
-    () => {},
-  );
+  const queryClient = useQueryClient();
+  // const { data } = useHomeData();
 
   useEffect(() => {
     setEditorMode(true);
-    fetchHomeData();
+    queryClient.invalidateQueries({ refetchType: "all" });
+    // fetchHomeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reload = React.useCallback(() => {
-    fetchHomeData();
+    // fetchHomeData();
+    queryClient.invalidateQueries({
+      queryKey: ["building"],
+      refetchType: "all",
+    });
     setLastRefreshed(Date.now());
     setVersion((prev) => prev + 1);
-  }, [fetchHomeData]);
+  }, []);
 
   useEffect(() => {
     let intervalId = null;
@@ -101,16 +85,6 @@ export default function EditorView() {
     };
   }, []);
 
-  const center = useMemo(() => {
-    const floorplan = home.buildings[0].floorplan;
-
-    const points = floorplan.room.flatMap((d: FRoom) =>
-      d.point.map((p: Point) => new THREE.Vector3(p.x / 100, p.y / 100, 0)),
-    );
-
-    return getRoomCenterAndZoom(points);
-  }, [home.buildings]);
-
   if (errors.filter((e) => e.type === ErrorType.FATAL).length != 0) {
     return <ErrorList isOpen={true} closeModal={undefined} />;
   }
@@ -143,9 +117,9 @@ export default function EditorView() {
           <PerspectiveCamera position={[0, 10, 0]} makeDefault />
           <OrbitControls />
           <ambientLight intensity={3} color="#f4fffa" />
-          <group key={version}>
-            <Scene />
-          </group>
+          {/* <group key={version}> */}
+          <Scene />
+          {/* </group> */}
         </Canvas>
       </div>
     </>

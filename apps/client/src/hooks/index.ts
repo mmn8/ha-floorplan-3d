@@ -1,2 +1,2 @@
-export { useRooms, useRoom, useBuilding } from "./useHomeData"
+export { useRooms, useRoom, useBuilding, useHomeData, useAppConfig } from "./useHomeData"
 export { useCurrentRoom } from "./useCurrentRoom"

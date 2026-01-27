@@ -1,7 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 import { CSG } from "three-csg-ts";
-import { useHomeStore } from "@/store";
+import { useHomeData } from "@/hooks";
 import { useColor } from "@/utils/useColor";
 import type { Component } from "@/renderer/Components";
 import { IBuildingData } from "@/types";
@@ -31,7 +31,6 @@ const Wall: React.FC<WallProps> = ({
   thickness,
   building,
 }) => {
-  const { home } = useHomeStore();
   const floorplan = building.floorplan;
   const color = useColor("wall");
 
@@ -56,9 +55,6 @@ const Wall: React.FC<WallProps> = ({
       (real_yStart + real_yEnd) / 2,
     ];
 
-    if (home === undefined) {
-      return undefined;
-    }
     const wallGeom = new THREE.BoxGeometry(
       real_lenght,
       real_height,
@@ -114,7 +110,7 @@ const Wall: React.FC<WallProps> = ({
     });
 
     return end_result?.geometry ?? sub.geometry;
-  }, [home, floorplan, height, thickness, xEnd, xStart, yEnd, yStart]);
+  }, [floorplan, height, thickness, xEnd, xStart, yEnd, yStart]);
 
   return (
     <>
