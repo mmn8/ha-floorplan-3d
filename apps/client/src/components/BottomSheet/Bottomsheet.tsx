@@ -21,7 +21,7 @@ function calculateConstraints(targetRef) {
   const rect = targetRef.current.getBoundingClientRect();
   return {
     top: 0.25 * window.innerHeight,
-    bottom: window.innerHeight - (rect.bottom - rect.top) - 40,
+    bottom: window.innerHeight - (rect.bottom - rect.top) - 48,
   };
 }
 export const BottomSheetContainer = () => {
@@ -42,8 +42,9 @@ export const BottomSheetContainer = () => {
     if (constraints.bottom === 0) return;
     animate(y, isOpen ? constraints.top : constraints.bottom, {
       type: "spring",
-      stiffness: 300,
-      damping: 30,
+      stiffness: 380,
+      damping: 50,
+      mass: 0.9,
     });
   });
 
@@ -61,7 +62,7 @@ export const BottomSheetContainer = () => {
   }, [isOpen]);
 
   const handleDragEnd = (_, info: PanInfo) => {
-    const isOpening = info.point.y < constraints.top;
+    const isOpening = info.delta.y < 0;
     setIsOpen(isOpening);
   };
 
@@ -79,7 +80,7 @@ export const BottomSheetContainer = () => {
         y={y}
         constraints={constraints}
         onDragEnd={handleDragEnd}
-        sceneData={[]}
+        sceneData={cardsData?.data?.cards?.[0].scenes ?? []}
         targetRef={targetRef}
       >
         <ErrorBoundary
@@ -116,12 +117,14 @@ interface SceneSelectProps {
 
 function Icon() {
   return (
-    <div className="flex text-text flex-col items-center text-xs">
-      <div className="w-10  h-10 rounded-full flex justify-center items-center text-text border-[hsl(0,0%,30%)] border-0">
-        <DynamicIcon name="tv" size={26} className="stroke-1 " />
-      </div>
+    <div className="w-12 h-12 rounded-full items-center flex justify-center border-border border-1">
+      <div className="flex text-text flex-col items-center text-xs">
+        <div className="w-10  h-10 rounded-full flex justify-center items-center text-text border-[hsl(0,0%,30%)] border-0">
+          <DynamicIcon name="tv-minimal-play" size={26} className="stroke-1 " />
+        </div>
 
-      <p className="mt-[-4px]">TV</p>
+        {/* <p className="mt-[-4px]">TV</p> */}
+      </div>
     </div>
   );
 }
@@ -129,7 +132,7 @@ function Icon() {
 function SceneSelect({ scenes }: SceneSelectProps) {
   return (
     <>
-      <div className="h-14 w-screen flex justify-center gap-20 pl-4 pr-4">
+      <div className="h-14 w-screen flex justify-center gap-20 pl-4 pr-4 mt-2">
         {scenes.map((scene, index) => {
           return <Icon key={index} {...scene} />;
         })}
@@ -168,7 +171,7 @@ const BottomSheetView = ({
           </motion.div>
           <div
             ref={targetRef}
-            className={`h-28 bottom-0  w-screen absolute z-10   text-text flex items-center justify-center bg-dark  pointer-events-auto flex-col `}
+            className={`h-28 bottom-0  w-screen absolute z-10  rounded-t-xl   text-text flex items-center justify-center bg-dark  pointer-events-auto flex-col `}
           >
             <SceneSelect scenes={sceneData} />
             <RoomSelector />

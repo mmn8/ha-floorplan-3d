@@ -22,3 +22,11 @@
   --color-text: hsl(0, 0%, 90%);
   --color-floor: hsl(0, 0%, 20%);
 }
+
+html,
+body {
+  position: fixed;
+  width: 100%;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
