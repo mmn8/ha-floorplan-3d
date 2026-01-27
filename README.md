@@ -4,7 +4,7 @@ Ha Floorplan 3D is a digital twin of your home. It is a Home Assistant dashboard
 
 **Disclaimer 1:** currently the app is "mobile-first". Meaning there is not a desktop UI yet
 
-**Disclaimer 2:** the software is in **beta** stage: a lot of features are missing and don't be suprised if you find a bug and please report it in issues tab.
+**Disclaimer 2:** the software is in **pre-alpha** stage: a lot of features are missing and don't be suprised if you find a bug and please report it in issues tab.
 
 
 
