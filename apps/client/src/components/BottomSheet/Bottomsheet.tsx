@@ -20,6 +20,7 @@ import { ISceneIcon } from "@/types";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
 import { useClickAction } from "@/hooks/useClickAction";
 import { useEvaluateAction } from "@/utils/EvaluateAction";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 function calculateConstraints(targetRef) {
   const rect = targetRef.current.getBoundingClientRect();
@@ -148,6 +149,10 @@ function Icon({
 }
 
 function SceneSelect({ scenes }: SceneSelectProps) {
+  if (!(scenes.length > 0)) {
+    return <p>No quick action scenes configured</p>;
+  }
+
   return (
     <>
       <div className="h-14 w-screen flex justify-center gap-20 pl-4 pr-4 mt-2">
@@ -159,6 +164,7 @@ function SceneSelect({ scenes }: SceneSelectProps) {
   );
 }
 
+/// Store room selector state else where so it doesnt show loading anim
 const BottomSheetView = ({
   y,
   constraints,
@@ -169,8 +175,17 @@ const BottomSheetView = ({
 }: BottomSheetViewProps) => {
   const [open, setOpen] = useState(false);
 
+  const { vibrate } = useHapticFeedback();
+
   const handlers = useSwipeable({
-    onSwipedDown: () => setOpen(!open),
+    onSwipedDown: () => {
+      setOpen(!open);
+      vibrate("light");
+    },
+    onSwipedUp: () => {
+      setOpen(!open);
+      vibrate("light");
+    },
     trackMouse: true,
   });
 

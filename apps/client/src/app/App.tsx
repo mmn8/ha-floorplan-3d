@@ -8,6 +8,7 @@ import HomeView from "@/pages/HomeView";
 import { HomeAssistantProvider } from "@/utils/HaConnect";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Test from "@/pages/TestPage";
+import { useEffect } from "react";
 
 function calculateBaseIngress() {
   const parts = window.location.pathname.split("/");
@@ -36,6 +37,30 @@ const App: React.FC = () => {
   console.log(basename);
 
   const { websocket, auth_token } = resolveWebsocketParams();
+
+  useEffect(() => {
+    try {
+      const topWin = window.top;
+      const topDoc = topWin.document.documentElement;
+      const topBody = topWin.document.body;
+
+      const originalOverscroll = topDoc.style.overscrollBehaviorY;
+      const originalOverflow = topDoc.style.overflow;
+
+      topDoc.style.setProperty("overscroll-behavior-y", "none", "important");
+      topBody.style.setProperty("overscroll-behavior-y", "none", "important");
+
+      topDoc.style.setProperty("overflow", "hidden", "important");
+
+      return () => {
+        topDoc.style.overscrollBehaviorY = originalOverscroll;
+        topDoc.style.overflow = originalOverflow;
+        topBody.style.overscrollBehaviorY = originalOverscroll;
+      };
+    } catch (e) {
+      console.warn(e);
+    }
+  }, []);
   return (
     <>
       <QueryClientProvider client={queryClient}>

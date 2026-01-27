@@ -1,6 +1,8 @@
 import Modal from "@/components/Modal";
 import { useErrorStore } from "@/store/ErrorStore";
 import type { Error } from "@/store/ErrorStore";
+import { RefreshCcw } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ErrorDisplay {
   error: Error;
@@ -23,10 +25,23 @@ function Divider() {
 
 export function ErrorList() {
   const { errors } = useErrorStore();
+  const queryClient = useQueryClient();
+
+  function handleClick() {
+    queryClient.invalidateQueries({ refetchType: "all" });
+  }
 
   return (
     <div className="w-auto h-auto flex flex-col">
-      <h1 className="text-2xl text-red-500">{errors.length} Error(s)</h1>
+      <div className="flex text-gray-400 items-center gap-4">
+        <h1 className="text-2xl text-red-500">{errors.length} Error(s)</h1>
+        <button
+          className="	rounded-full text-text bg-light p-1 transition duration-10 focus:outline-none focus:ring-2"
+          onClick={handleClick}
+        >
+          <RefreshCcw className="stroke-2  " />
+        </button>
+      </div>
       <Divider />
       <div className="flex mt-2 flex-col gap-1 pl-1">
         {errors.map((item, index) => {

@@ -23,7 +23,8 @@ COPY ./apps/backend .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /backend-exec
 
 # ---- Final HA runtime image ----
-FROM $BUILD_FROM
+# FROM $BUILD_FROM
+FROM ubuntu:22.04
 
 WORKDIR /app
 

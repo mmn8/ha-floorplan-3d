@@ -25,7 +25,7 @@ import { IUISchema } from "@/types";
 
 export function useUI(ui: string) {
   const uiQuery = useQuery({
-    queryKey: ["ui"],
+    queryKey: ["ui", ui],
     queryFn: () => fetchResource<IUISchema>("./config/" + ui, YAML.parse),
     staleTime: 60 * 1000,
   });
