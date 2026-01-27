@@ -2,7 +2,7 @@ import SceneSelect from "./SceneSelect";
 import { DeviceCard } from "./EntityCard";
 import { IRoomCard, IDeviceCard } from "@/types";
 
-const _RoomCard = ({ title, entities, scenes }: IRoomCard) => {
+const _RoomCard = ({ title, entities }: IRoomCard) => {
   return (
     <div className="flex flex-col overflow-y-auto mt-2">
       <h1 className=" text-xl font-semibold text-[hsl(0,0%,90%)]">{title}</h1>
