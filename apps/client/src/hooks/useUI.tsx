@@ -27,7 +27,7 @@ export function useUI(ui: string) {
   const uiQuery = useQuery({
     queryKey: ["ui"],
     queryFn: () => fetchResource<IUISchema>("./config/" + ui, YAML.parse),
-    staleTime: Infinity,
+    staleTime: 60 * 1000,
   });
 
   return { ...uiQuery };

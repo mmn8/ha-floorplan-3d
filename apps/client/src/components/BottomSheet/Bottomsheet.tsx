@@ -25,7 +25,7 @@ function calculateConstraints(targetRef) {
   const rect = targetRef.current.getBoundingClientRect();
   return {
     top: 0.25 * window.innerHeight,
-    bottom: window.innerHeight - (rect.bottom - rect.top),
+    bottom: window.innerHeight - (rect.bottom - rect.top) - 40,
   };
 }
 export const BottomSheetContainer = () => {
