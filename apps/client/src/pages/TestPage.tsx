@@ -1,45 +1,32 @@
 import { useSwipeable } from "react-swipeable";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 function SwipeBox() {
   const [open, setOpen] = useState(false);
   const [swiped, setSwiped] = useState("");
 
   const handlers = useSwipeable({
-    onSwipedDown: () => setOpen(true),
-    onSwipedUp: () => setOpen(false),
+    onSwipedDown: () => setOpen(!open),
     trackMouse: true,
   });
+  const slides = ["Slide One", "Slide Two", "Slide Three"];
 
   return (
     <>
       <div {...handlers}>
         {/* Phorming box */}
-        <motion.div
-          initial={false}
-          animate={{
-            height: open ? 220 : 100,
-            scaleY: open ? 1 : 1,
-            opacity: open ? 1 : 1,
-            translateY: open ? ((220 - 100) / 2) * -1 : 0,
-          }}
-          transition={{
-            height: { duration: 0.35, ease: "easeInOut" },
-            translateY: { duration: 0.35, ease: "easeInOut" },
-            scaleY: { type: "spring", stiffness: 140, damping: 18 },
-            opacity: { duration: 0.2 },
-          }}
-          style={{
-            transformOrigin: "top",
-            overflow: "hidden",
-            background: "#0f0f0f",
-            borderRadius: 16,
-          }}
-          className="w-screen"
-        >
-          <div style={{ padding: 20, color: "#fff" }}>Phorming content 🌱</div>
-        </motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={open ? 0 : 1}
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.1, ease: "easeInOut" }}
+          >
+            {slides[open ? 0 : 1]}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </>
   );

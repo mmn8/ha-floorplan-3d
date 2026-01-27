@@ -60,6 +60,7 @@ export function useHomeData() {
   const baseHomeConfigQuery = useQuery({
     queryKey: ["home"],
     queryFn: () => fetchResource<IHomeConfig>("./config/home.yml", YAML.parse),
+    staleTime: Infinity,
   });
 
   const buildingList = baseHomeConfigQuery?.data?.buildings;
@@ -70,6 +71,7 @@ export function useHomeData() {
     queryFn: () =>
       fetchResource<IBuilding>(`./config/${buildingFile}`, YAML.parse),
     enabled: !!buildingList,
+    staleTime: Infinity,
   });
 
   const floorplanName = buildingQuery?.data?.floorplan_name;
@@ -85,6 +87,7 @@ export function useHomeData() {
         return parser.parse(text)?.home;
       }),
     enabled: !!floorplanName,
+    staleTime: Infinity,
   });
 
   const isLoading =

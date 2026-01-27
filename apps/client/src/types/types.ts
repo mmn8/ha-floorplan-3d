@@ -112,11 +112,11 @@ export const EntityCard = z.object({
 export const RoomCardSchema = z.object({
 	type: z.literal("room"),
 	title: z.string().min(1).describe("Name shown on bottom sheet"),
-	scenes: z.array(SceneSchema).min(1),
 	entities: z.array(EntityCard).min(1),
 }).describe("Card with scene select and grid of entities displayed on bottom sheet")
 
 export const UISchema = z.object({
+	scenes: z.array(SceneSchema).min(1),
 	cards: z.array(z.discriminatedUnion("type", [RoomCardSchema]))
 })
 

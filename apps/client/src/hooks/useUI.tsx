@@ -1,6 +1,7 @@
 import YAML from "yaml";
 import { fetchResource } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
+import { IUISchema } from "@/types";
 
 // TODO: Improve this
 // export async function loadUI(ui_file: string) {
@@ -25,7 +26,8 @@ import { useQuery } from "@tanstack/react-query";
 export function useUI(ui: string) {
   const uiQuery = useQuery({
     queryKey: ["ui"],
-    queryFn: () => fetchResource("./config/" + ui, YAML.parse),
+    queryFn: () => fetchResource<IUISchema>("./config/" + ui, YAML.parse),
+    staleTime: Infinity,
   });
 
   return { ...uiQuery };

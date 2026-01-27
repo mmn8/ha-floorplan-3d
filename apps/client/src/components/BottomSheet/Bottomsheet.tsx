@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState, useEffectEvent } from "react";
+import { useSwipeable } from "react-swipeable";
 import { RoomSelector } from "@/components/RoomSelector";
 import {
   motion,
   useMotionValue,
   animate,
   MotionValue,
+  AnimatePresence,
   PanInfo,
 } from "framer-motion";
 import { useBottomSheetStore } from "@/store";
@@ -14,14 +16,16 @@ import { renderCard } from "@/renderer/Components";
 import { ErrorList } from "@/components/ErrorList";
 import ErrorBoundary from "@/utils/3DErrorBoundary";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
-import { IUISchema, ISceneIcon } from "@/types";
-import { DynamicIcon } from "lucide-react/dynamic";
+import { ISceneIcon } from "@/types";
+import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { useClickAction } from "@/hooks/useClickAction";
+import { useEvaluateAction } from "@/utils/EvaluateAction";
 
 function calculateConstraints(targetRef) {
   const rect = targetRef.current.getBoundingClientRect();
   return {
     top: 0.25 * window.innerHeight,
-    bottom: window.innerHeight - (rect.bottom - rect.top) - 48,
+    bottom: window.innerHeight - (rect.bottom - rect.top),
   };
 }
 export const BottomSheetContainer = () => {
@@ -80,7 +84,7 @@ export const BottomSheetContainer = () => {
         y={y}
         constraints={constraints}
         onDragEnd={handleDragEnd}
-        sceneData={cardsData?.data?.cards?.[0].scenes ?? []}
+        sceneData={cardsData?.data?.scenes ?? []}
         targetRef={targetRef}
       >
         <ErrorBoundary
@@ -115,15 +119,29 @@ interface SceneSelectProps {
   scenes: ISceneIcon[];
 }
 
-function Icon() {
-  return (
-    <div className="w-12 h-12 rounded-full items-center flex justify-center border-border border-1">
-      <div className="flex text-text flex-col items-center text-xs">
-        <div className="w-10  h-10 rounded-full flex justify-center items-center text-text border-[hsl(0,0%,30%)] border-0">
-          <DynamicIcon name="tv-minimal-play" size={26} className="stroke-1 " />
-        </div>
+function Icon({
+  icon,
+  tap_action,
+  double_tap_action,
+  hold_action,
+  title,
+}: ISceneIcon) {
+  const { evaluateAction } = useEvaluateAction();
 
-        {/* <p className="mt-[-4px]">TV</p> */}
+  const clickHandlers = useClickAction({
+    onSingleClick: () => {
+      evaluateAction(tap_action);
+    },
+    onDoubleClick: () => {
+      evaluateAction(double_tap_action);
+    },
+    onHold: () => evaluateAction(hold_action),
+  });
+
+  return (
+    <div className="items-center flex flex-col text-text " {...clickHandlers}>
+      <div className="w-12 h-12 rounded-full items-center flex justify-center border-border border-1 flex-shrink-0">
+        <DynamicIcon name={icon as IconName} size={28} className="stroke-1 " />
       </div>
     </div>
   );
@@ -149,6 +167,13 @@ const BottomSheetView = ({
   sceneData,
   children,
 }: BottomSheetViewProps) => {
+  const [open, setOpen] = useState(false);
+
+  const handlers = useSwipeable({
+    onSwipedDown: () => setOpen(!open),
+    trackMouse: true,
+  });
+
   return (
     <>
       <div className="fixed bottom-0  flex items-center justify-center pointer-events-none inset-x-1">
@@ -171,10 +196,26 @@ const BottomSheetView = ({
           </motion.div>
           <div
             ref={targetRef}
-            className={`h-28 bottom-0  w-screen absolute z-10  rounded-t-xl   text-text flex items-center justify-center bg-dark  pointer-events-auto flex-col `}
+            className={`h-20 bottom-0  w-screen absolute z-10  rounded-t-xl   text-text flex items-center justify-center bg-dark  pointer-events-auto flex-col `}
           >
-            <SceneSelect scenes={sceneData} />
-            <RoomSelector />
+            <div {...handlers}>
+              {/* <RoomSelector /> */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={open ? 0 : 1}
+                  initial={{ y: -40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 40, opacity: 0 }}
+                  transition={{ duration: 0.1, ease: "easeInOut" }}
+                >
+                  {!open ? (
+                    <RoomSelector />
+                  ) : (
+                    <SceneSelect scenes={sceneData} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
