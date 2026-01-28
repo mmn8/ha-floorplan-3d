@@ -52,11 +52,22 @@ const App: React.FC = () => {
 
       topDoc.style.setProperty("overflow", "hidden", "important");
 
-      return () => {
-        topDoc.style.overscrollBehaviorY = originalOverscroll;
-        topDoc.style.overflow = originalOverflow;
-        topBody.style.overscrollBehaviorY = originalOverscroll;
-      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const observer = new (window?.top as any).MutationObserver(() => {
+        if (!document.body.ownerDocument.contains(window.frameElement)) {
+          topDoc.style.overscrollBehaviorY = originalOverscroll;
+          topDoc.style.overflow = originalOverflow;
+          topBody.style.overscrollBehaviorY = originalOverscroll;
+
+          console.log("iframe no longer with us");
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(window.top.document.body, {
+        childList: true,
+        subtree: true,
+      });
     } catch (e) {
       console.warn(e);
     }
