@@ -1,17 +1,18 @@
 {
-	"name": "ha-floorplan-3d",
-	"version": "1.0.0",
-	"description": "",
-	"scripts": {
-		"dev": "npm run dev --workspace client & cd apps/backend && go run .",
-		"generate:types": "bash scripts/generate-types.sh"
-	},
-	"workspaces": [],
-	"devDependencies": {
-		"@adobe/jsonschema2md": "8.0.7",
-		"zod2md": "^0.2.4"
-	},
-	"dependencies": {
-		"yaml": "^2.8.2"
-	}
+  "name": "ha-floorplan-3d",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npm run dev --workspace client & go run apps/backend && fg",
+    "generate:types": "bash scripts/generate-types.sh"
+  },
+  "workspaces": [
+  ],
+  "devDependencies": {
+    "@adobe/jsonschema2md": "8.0.7",
+    "zod2md": "^0.2.4"
+  },
+  "dependencies": {
+    "yaml": "^2.8.2"
+  }
 }
