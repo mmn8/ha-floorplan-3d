@@ -7,7 +7,6 @@ import Editor from "@/pages/EditorView";
 import HomeView from "@/pages/HomeView";
 import { HomeAssistantProvider } from "@/utils/HaConnect";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Test from "@/pages/TestPage";
 import { useEffect } from "react";
 
 function calculateBaseIngress() {
@@ -99,7 +98,6 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/*" element={<HomeView />} />
                 <Route path="/editor" element={<Editor />} />
-                <Route path="/test" element={<Test />} />
               </Routes>
             </HomeAssistantProvider>
           </Home>
