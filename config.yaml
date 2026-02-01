@@ -2,7 +2,7 @@ name: "Ha Floorplan 3D"
 description: "A floorplan renderer"
 slug: "ha-floorplan-3d"
 image: "ghcr.io/mmn8/ha-floorplan-3d-{arch}"
-version: "0.0.15"
+version: "0.0.16"
 init: false
 arch:
   - aarch64
@@ -13,9 +13,9 @@ ingress_panel: true
 panel_icon: mdi:cog
 panel_title: "Ha Floorplan 3D"
 map:
- - type: homeassistant_config
-   read_only: False
- - type: addon_config
-   read_only: False
+  - type: homeassistant_config
+    read_only: False
+  - type: addon_config
+    read_only: False
 ports:
   8099/tcp: 8099
