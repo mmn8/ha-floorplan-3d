@@ -13,7 +13,7 @@ import { useBottomSheetStore } from "@/store";
 import { useCurrentRoom, useRoom } from "@/hooks";
 import { useUI } from "@/hooks/useUI";
 import { renderCard } from "@/renderer/Components";
-import { ErrorList } from "@/components/ErrorList";
+import { ErrorList } from "@/components/ErrorList/ErrorList";
 import ErrorBoundary from "@/utils/3DErrorBoundary";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
 import { ISceneIcon } from "@/types";

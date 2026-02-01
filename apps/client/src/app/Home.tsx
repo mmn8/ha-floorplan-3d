@@ -1,5 +1,5 @@
 import SetupWizard from "@/pages/SetupView";
-import { LoadingCircleSpinner } from "@/components/LoadingSpinner";
+import { LoadingCircleSpinner } from "@/components/LoadingSpinner/LoadingSpinner";
 import { useHomeData, useAppConfig } from "@/hooks";
 
 export interface Config {

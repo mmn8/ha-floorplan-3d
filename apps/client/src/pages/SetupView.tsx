@@ -1,6 +1,6 @@
 import { Home } from "lucide-react";
 import React from "react";
-import { ProgressButton } from "@/components/Button";
+import { ProgressButton } from "@/components/ProgressButton/Button";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 

@@ -1,7 +1,7 @@
 import { AlertTriangle, Settings, RefreshCcw } from "lucide-react";
 import React from "react";
 import { useErrorStore } from "@/store";
-import ErrorList from "@/components/ErrorList";
+import ErrorList from "@/components/ErrorList/ErrorList";
 import { MouseEventHandler } from "react";
 
 interface ErrorCounterProps {

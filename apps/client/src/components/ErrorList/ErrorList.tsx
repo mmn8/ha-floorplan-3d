@@ -1,4 +1,4 @@
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 import { useErrorStore } from "@/store/ErrorStore";
 import type { Error } from "@/store/ErrorStore";
 import { RefreshCcw } from "lucide-react";

@@ -3,12 +3,12 @@ import { BottomSheetContainer } from "@/components/BottomSheet";
 import { Canvas } from "@react-three/fiber";
 import Scene from "@/renderer/Scene";
 import useIsMobile from "@/hooks/useIsMobile";
-import { NoMobile } from "@/components/NoMobile";
+import { NoMobile } from "@/components/NoMobile/NoMobile";
 import { useCurrentRoom } from "@/hooks";
 import Camera from "@/renderer/Camera";
 import { ScanEye } from "lucide-react";
 import { useErrorStore, ErrorType } from "@/store/ErrorStore";
-import ErrorList from "@/components/ErrorList";
+import ErrorList from "@/components/ErrorList/ErrorList";
 import React from "react";
 
 export default function HomeView() {

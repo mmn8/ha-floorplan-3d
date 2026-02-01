@@ -38,40 +38,49 @@ const App: React.FC = () => {
 
   const { websocket, auth_token } = resolveWebsocketParams();
 
+  const addOverscrollTag = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const targetWindow = window.top as any;
+
+    targetWindow.document.documentElement.style.setProperty(
+      "overscroll-behavior-y",
+      "none",
+      "important",
+    );
+  };
+
+  const removeOverscrollTag = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const targetWindow = window.top as any;
+
+    targetWindow.document.documentElement.style.removeProperty(
+      "overscroll-behavior-y",
+    );
+  };
+
   useEffect(() => {
-    try {
-      const topWin = window.top;
-      const topDoc = topWin.document.documentElement;
-      const topBody = topWin.document.body;
+    console.log("app use effect constructor running");
+    addOverscrollTag();
 
-      const originalOverscroll = topDoc.style.overscrollBehaviorY;
-      const originalOverflow = topDoc.style.overflow;
+    const visibilitChange = () => {
+      console.log("Visibility change: ", document.visibilityState);
+      if (document.visibilityState === "visible") {
+        addOverscrollTag();
+      } else if (document.visibilityState === "hidden") {
+        removeOverscrollTag();
+      }
+    };
 
-      topDoc.style.setProperty("overscroll-behavior-y", "none", "important");
-      topBody.style.setProperty("overscroll-behavior-y", "none", "important");
+    document.addEventListener("visibilitychange", visibilitChange);
 
-      topDoc.style.setProperty("overflow", "hidden", "important");
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const observer = new (window?.top as any).MutationObserver(() => {
-        if (!document.body.ownerDocument.contains(window.frameElement)) {
-          topDoc.style.overscrollBehaviorY = originalOverscroll;
-          topDoc.style.overflow = originalOverflow;
-          topBody.style.overscrollBehaviorY = originalOverscroll;
-
-          console.log("iframe no longer with us");
-          observer.disconnect();
-        }
-      });
-
-      observer.observe(window.top.document.body, {
-        childList: true,
-        subtree: true,
-      });
-    } catch (e) {
-      console.warn(e);
-    }
+    //TODO: Remove listener
+    return () => {
+      console.log("App use effect deconsturctor running");
+      removeOverscrollTag();
+      document.removeEventListener("visibilitychange", visibilitChange);
+    };
   }, []);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>

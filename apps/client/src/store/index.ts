@@ -1,3 +1,2 @@
-export { useBottomSheetStore } from "./HomeStore"
-export { useConfigStore } from "./ConfigStore"
-export { useErrorStore } from "./ErrorStore"
+export { useBottomSheetStore } from "./BottomSheetStore";
+export { useErrorStore } from "./ErrorStore";
